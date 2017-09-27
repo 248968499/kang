@@ -13,6 +13,9 @@ import CustomerManagement from './views/UserManagement/CustomerManagement.vue'
 import UserManagement from './views/UserManagement/UserManagement.vue'
 import BuyingManagement from './views/UserManagement/BuyingManagement.vue'
 import ConsultancyManagement from './views/UserManagement/ConsultancyManagement.vue'
+import CustomerDetails from './views/UserManagement/CustomerDetails.vue'
+import BuyingDetails from './views/UserManagement/BuyingDetails.vue'
+import ConsultancyDetails from './views/UserManagement/ConsultancyDetails.vue'
 
 let routes = [
     {
@@ -26,7 +29,7 @@ let routes = [
         component: NotFound,
         name: '',
         hidden: true
-    },
+    }, 
     //{ path: '/main', component: Main },
     // {
     //     path: '/',
@@ -160,6 +163,15 @@ let routes = [
         ]
     },
     {
+        path: '/CustomerDetails',
+        component: Home,
+        name: '顾客管理',
+        hidden: true,
+        children: [
+            { path: '/CustomerDetails', component: CustomerDetails, name: '顾客详情' }
+        ]
+    }, 
+    {
         path: '/',
         component: Home,
         name: '用户管理',
@@ -170,6 +182,15 @@ let routes = [
         ]
     },
     {
+        path: '/BuyingDetails',
+        component: Home,
+        name: '顾客管理',
+        hidden: true,
+        children: [
+            { path: '/BuyingDetails', component: BuyingDetails, name: '买手详情' }
+        ]
+    }, 
+    {
         path: '/',
         component: Home,
         name: '用户管理',
@@ -179,6 +200,15 @@ let routes = [
             { path: '/ConsultancyManagement', component: ConsultancyManagement, name: '顾问管理' }
         ]
     },
+    {
+        path: '/ConsultancyDetails',
+        component: ConsultancyManagement,
+        name: '顾问管理',
+        hidden: true,
+        children: [
+            { path: '/ConsultancyDetails', component: ConsultancyDetails, name: '顾问详情' }
+        ]
+    }, 
     
     {
         path: '*',

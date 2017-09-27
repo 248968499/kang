@@ -21,18 +21,16 @@
 		<!--列表-->
 		<el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
 			<el-table-column type="selection" width="55">
+			</el-table-column> 
+			<el-table-column prop="name" label="用户名" width="120" sortable>
 			</el-table-column>
-			<el-table-column type="index" width="60">
+			<el-table-column prop="sex" label="昵称" width="100" :formatter="formatSex" sortable>
 			</el-table-column>
-			<el-table-column prop="name" label="姓名" width="120" sortable>
+			<el-table-column prop="age" label="手机号" width="100" sortable>
 			</el-table-column>
-			<el-table-column prop="sex" label="性别" width="100" :formatter="formatSex" sortable>
+			<el-table-column prop="birth" label="产品数量" width="120" sortable>
 			</el-table-column>
-			<el-table-column prop="age" label="年龄" width="100" sortable>
-			</el-table-column>
-			<el-table-column prop="birth" label="生日" width="120" sortable>
-			</el-table-column>
-			<el-table-column prop="addr" label="地址" min-width="180" sortable>
+			<el-table-column prop="addr" label="注册时间" min-width="180" sortable>
 			</el-table-column>
 			<el-table-column label="操作" width="150">
 				<template scope="scope">
@@ -206,8 +204,9 @@
 			},
 			//显示编辑界面
 			handleEdit: function (index, row) {
-				this.editFormVisible = true;
-				this.editForm = Object.assign({}, row);
+                  this.$router.push({ path: '/BuyingDetails'}); 
+				// this.editFormVisible = true;
+				// this.editForm = Object.assign({}, row);
 			},
 			//显示新增界面
 			handleAdd: function () {

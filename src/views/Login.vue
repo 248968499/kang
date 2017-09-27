@@ -44,6 +44,7 @@
         this.$refs.ruleForm2.resetFields();
       },
       handleSubmit2(ev) {
+        debugger;
         var _this = this;
         this.$refs.ruleForm2.validate((valid) => {
           if (valid) {
