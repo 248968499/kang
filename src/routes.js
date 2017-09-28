@@ -13,9 +13,10 @@ import CustomerManagement from './views/UserManagement/CustomerManagement.vue'
 import UserManagement from './views/UserManagement/UserManagement.vue'
 import BuyingManagement from './views/UserManagement/BuyingManagement.vue'
 import ConsultancyManagement from './views/UserManagement/ConsultancyManagement.vue'
-import CustomerDetails from './views/UserManagement/CustomerDetails.vue'
-import BuyingDetails from './views/UserManagement/BuyingDetails.vue'
-import ConsultancyDetails from './views/UserManagement/ConsultancyDetails.vue'
+import GoodsManagement from './views/GoodsManagement/GoodsManagement.vue'
+import GoodsAdd from './views/GoodsManagement/GoodsAdd.vue'
+
+
 
 let routes = [
     {
@@ -79,7 +80,7 @@ let routes = [
         iconCls: 'fa fa-address-card',
         leaf: true,//只有一个节点
         children: [
-            { path: '/', component: Page6, name: '概况' }
+            { path: '/Form', component: Form, name: '概况' }
         ]
     },
     {
@@ -135,13 +136,22 @@ let routes = [
     {
         path: '/',
         component: Home,
-        name: '',
+        name: '商品管理',
         iconCls: 'fa fa-address-card',
         leaf: true,//只有一个节点
         children: [
-            { path: '/', component: Page6, name: '商品管理' }
+            { path: '/GoodsManagement', component: GoodsManagement, name: '商品管理' }
         ]
     },
+    {
+        path: '/GoodsAdd',
+        component: Home,
+        name: '商品管理',
+        hidden: true,
+        children: [
+            { path: '/GoodsAdd', component: GoodsAdd, name: '发布新产品' }
+        ]
+    }, 
     {
         path: '/',
         component: Home,
@@ -168,7 +178,7 @@ let routes = [
         name: '顾客管理',
         hidden: true,
         children: [
-            { path: '/CustomerDetails', component: CustomerDetails, name: '顾客详情' }
+            { path: '/CustomerDetails', component: Table, name: '顾客详情' }
         ]
     }, 
     {
@@ -187,7 +197,7 @@ let routes = [
         name: '顾客管理',
         hidden: true,
         children: [
-            { path: '/BuyingDetails', component: BuyingDetails, name: '买手详情' }
+            { path: '/BuyingDetails', component: Table, name: '买手详情' }
         ]
     }, 
     {
@@ -206,7 +216,7 @@ let routes = [
         name: '顾问管理',
         hidden: true,
         children: [
-            { path: '/ConsultancyDetails', component: ConsultancyDetails, name: '顾问详情' }
+            { path: '/ConsultancyDetails', component: Table, name: '顾问详情' }
         ]
     }, 
     
