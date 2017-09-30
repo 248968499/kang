@@ -1,4 +1,5 @@
 <template>
+	<section>
   <el-tabs v-model="activeName" @tab-click="handleClick">
     <el-tab-pane label="热卖中" name="first">
         <el-template>
@@ -27,7 +28,7 @@
               tooltip-effect="dark"
               style="width: 100%"
               @selection-change="selsChange">
-              <el-table-column
+                 <el-table-column
                 type="selection"
                 width="55">
               </el-table-column>
@@ -37,20 +38,37 @@
                 </template>  
             </el-table-column>  
               <el-table-column
-                label="日期"
+                label="产品名称"
                 width="120">
                 <template scope="scope">{{ scope.row.date }}</template>
               </el-table-column>
               <el-table-column
                 prop="name"
-                label="姓名"
+                label="品牌"
                 width="120">
               </el-table-column>
               <el-table-column
                 prop="address"
-                label="地址"
-                show-overflow-tooltip>
+                label="库存">
               </el-table-column>
+               <el-table-column
+                prop="address"
+                label="状态">
+              </el-table-column>
+               <el-table-column
+                prop="address"
+                label="发布人">
+              </el-table-column>
+               <el-table-column
+                prop="address"
+                label="发布时间">
+              </el-table-column>
+              <el-table-column label="操作" width="150">
+				<template scope="scope">
+					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">下架</el-button>
+				</template>
+			</el-table-column>
             </el-table>
             <div style="margin-top: 20px">
               <el-button @click="selectionall()">全选</el-button>
@@ -87,7 +105,7 @@
               tooltip-effect="dark"
               style="width: 100%"
               @selection-change="selsChange">
-              <el-table-column
+                    <el-table-column
                 type="selection"
                 width="55">
               </el-table-column>
@@ -97,20 +115,37 @@
                 </template>  
             </el-table-column>  
               <el-table-column
-                label="日期"
+                label="产品名称"
                 width="120">
                 <template scope="scope">{{ scope.row.date }}</template>
               </el-table-column>
               <el-table-column
                 prop="name"
-                label="姓名"
+                label="品牌"
                 width="120">
               </el-table-column>
               <el-table-column
                 prop="address"
-                label="地址"
-                show-overflow-tooltip>
+                label="尺码">
               </el-table-column>
+               <el-table-column
+                prop="address"
+                label="状态">
+              </el-table-column>
+               <el-table-column
+                prop="address"
+                label="发布人">
+              </el-table-column>
+               <el-table-column
+                prop="address"
+                label="发布时间">
+              </el-table-column>
+              <el-table-column label="操作" width="150">
+				<template scope="scope">
+					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">下架</el-button>
+				</template>
+			</el-table-column>
             </el-table>
             <div style="margin-top: 20px">
               <el-button @click="selectionall()">全选</el-button>
@@ -158,20 +193,37 @@
                 </template>  
             </el-table-column>  
               <el-table-column
-                label="日期"
+                label="产品名称"
                 width="120">
                 <template scope="scope">{{ scope.row.date }}</template>
               </el-table-column>
               <el-table-column
                 prop="name"
-                label="姓名"
+                label="品牌"
                 width="120">
               </el-table-column>
               <el-table-column
                 prop="address"
-                label="地址"
-                show-overflow-tooltip>
+                label="尺码">
               </el-table-column>
+               <el-table-column
+                prop="address"
+                label="状态">
+              </el-table-column>
+               <el-table-column
+                prop="address"
+                label="发布人">
+              </el-table-column>
+               <el-table-column
+                prop="address"
+                label="发布时间">
+              </el-table-column>
+              <el-table-column label="操作" width="150">
+				<template scope="scope">
+					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">下架</el-button>
+				</template>
+			</el-table-column>
             </el-table>
             <div style="margin-top: 20px">
               <el-button @click="selectionall()">全选</el-button>
@@ -182,6 +234,7 @@
         </el-template>
     </el-tab-pane>
   </el-tabs>
+  	</section>
 </template>
 <script>
   export default {
