@@ -2,7 +2,7 @@
   <template>
 	<section>
         <el-tabs v-model="activeName" @tab-click="handleClick">
-    <el-tab-pane label="基本信息" name="ConsultancyDetails">
+    <el-tab-pane label="基本信息" name="first">
         <el-form ref="form" :model="form" label-width="80px">
              <el-row> 
             <el-col :span="1">
@@ -36,13 +36,16 @@
     </el-select>
  </el-form-item>
    <el-form-item label="尺码：" label-width="100px">
-    <el-checkbox-group @change="handleCheckedCitiesChange" >
-      <el-checkbox >xs    库存<el-input-number   :min="1" :max="10"></el-input-number></el-checkbox>
-      <el-checkbox >s    库存<el-input-number   :min="1" :max="10"></el-input-number> </el-checkbox>
-      <el-checkbox >M    库存<el-input-number   :min="1" :max="10"></el-input-number> </el-checkbox>
-      <el-checkbox >L    库存<el-input-number   :min="1" :max="10"></el-input-number></el-checkbox>
-      <el-checkbox >均码    库存<el-input-number   :min="1" :max="10"></el-input-number></el-checkbox>
-    </el-checkbox-group>
+    <el-checkbox v-model="cnum1">xs</el-checkbox><br>
+    <el-label>库存:<el-input-number v-model="num1" :disabled="cnum1==false"  :min="0" :max="100000"></el-input-number></el-label>
+     <el-checkbox v-model="cnum2">s</el-checkbox><br>
+    <el-label>库存:<el-input-number  v-model="num2" :disabled="cnum2==false" :min="0" :max="100000"></el-input-number></el-label>
+     <el-checkbox v-model="cnum3">M</el-checkbox><br>
+    <el-label>库存:<el-input-number  v-model="num3" :disabled="cnum3==false" :min="0" :max="100000"></el-input-number></el-label>
+     <el-checkbox v-model="cnum4">L</el-checkbox><br>
+    <el-label>库存:<el-input-number v-model="num4" :disabled="cnum4==false"  :min="0" :max="100000"></el-input-number></el-label>
+     <el-checkbox v-model="cnum5">均码xs</el-checkbox><br>
+    <el-label>库存:<el-input-number v-model="num5" :disabled="cnum5==false" :min="0" :max="100000"></el-input-number></el-label>
   </el-form-item>
   <el-form-item>
     <el-button>取消</el-button>
@@ -90,14 +93,25 @@
 </el-dialog>
 	</section>
 </template>
-
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+        <!-- 引入element JS -->
+        <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+        <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.js"></script>
 <script>
   export default {
     data() {
       return {
-           activeName: 'ConsultancyDetails',
-           dialogImageUrl: '',
-        dialogVisible: false,
+        num1: 0,
+        num2: 0,
+        num3: 0,
+        num4: 0,
+        num5: 0,
+        cnum1:false,
+        cnum2:false,
+        cnum3:false,
+        cnum4:false,
+        cnum5:false,
+        activeName: 'first',
         form: {
           name: '',
           region: '',
