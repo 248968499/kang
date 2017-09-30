@@ -30,7 +30,7 @@
 			</el-table-column>
 			<el-table-column prop="birth" label="产品数量" width="120" sortable>
 			</el-table-column>
-			<el-table-column prop="addr" label="注册时间" min-width="180" sortable>
+			<el-table-column prop="createTime" label="注册时间" min-width="180" sortable>
 			</el-table-column>
 			<el-table-column label="操作" width="150">
 				<template scope="scope">
@@ -108,7 +108,7 @@
 <script>
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
-	import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
+	import { getConsultancyList, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
 
 	export default {
 		data() {
@@ -168,18 +168,29 @@
 			},
 			//获取用户列表
 			getUsers() {
-				let para = {
-					page: this.page,
-					name: this.filters.name
-				};
+			let para = {
+					url:"59cbb548336a522ad06efe7e",
+					data:{} 
+				} 
 				this.listLoading = true;
 				//NProgress.start();
-				getUserListPage(para).then((res) => {
-					this.total = res.data.total;
-					this.users = res.data.users;
-					this.listLoading = false;
-					//NProgress.done();
+				getConsultancyList(para).then((res) => {
+					this.total = 20;
+					this.users = res.data.counselors;
+					this.listLoading = false; 
 				});
+				// let para = {
+				// 	page: this.page,
+				// 	name: this.filters.name
+				// };
+				// this.listLoading = true;
+				// //NProgress.start();
+				// getUserListPage(para).then((res) => {
+				// 	this.total = res.data.total;
+				// 	this.users = res.data.users;
+				// 	this.listLoading = false;
+				// 	//NProgress.done();
+				// });
 			},
 			//删除
 			handleDel: function (index, row) {

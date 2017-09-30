@@ -34,13 +34,13 @@
 			</el-table-column> 
 			<el-table-column prop="name" label="用户名" width="120" sortable>
 			</el-table-column>
-			<el-table-column prop="sex" label="昵称" width="100" :formatter="formatSex" sortable>
-			</el-table-column>
-			<el-table-column prop="age" label="手机号" width="100" sortable>
+			<el-table-column prop="nickName" label="用户名" width="120" sortable>
+			</el-table-column> 
+			<el-table-column prop="mobile" label="手机号" width="180" sortable>
 			</el-table-column>
 			<el-table-column prop="birth" label="加入小队" width="120" sortable>
 			</el-table-column>
-			<el-table-column prop="addr" label="注册时间" min-width="180" sortable>
+			<el-table-column prop="createTime" label="注册时间" min-width="180" sortable>
 			</el-table-column>
 			<el-table-column label="操作" width="150">
 				<template scope="scope">
@@ -116,9 +116,11 @@
 </template>
 
 <script>
-	import util from '../../common/js/util'
+	import util from '../../common/js/util' 
+	
 	//import NProgress from 'nprogress'
-	import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
+	import { getConsultancyList, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
+	// import FormatDate from '../../api/date';
 
 	export default {
 		data() {
@@ -188,18 +190,20 @@
 				this.getUsers();
 			},
 			//获取用户列表
-			getUsers() {
+			getUsers() { 
+				 
+//   axios.get(`api/api/counselors/59cbb548336a522ad06efe7e`);
+//  return;
 				let para = {
-					page: this.page,
-					name: this.filters.name
-				};
+					url:"59cbb548336a522ad06efe7e",
+					data:{} 
+				} 
 				this.listLoading = true;
 				//NProgress.start();
-				getUserListPage(para).then((res) => {
-					this.total = res.data.total;
-					this.users = res.data.users;
-					this.listLoading = false;
-					//NProgress.done();
+				getConsultancyList(para).then((res) => {
+					this.total = 20;
+					this.users = res.data.counselors;
+					this.listLoading = false; 
 				});
 			},
 			//删除

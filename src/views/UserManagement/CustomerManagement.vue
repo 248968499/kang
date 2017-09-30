@@ -24,13 +24,13 @@
 			</el-table-column> 
 			<el-table-column prop="nickName" label="昵称" width="100" sortable>
 			</el-table-column>
-			<el-table-column prop="sex" label="手机号" width="180" :formatter="formatSex" sortable>
+			<el-table-column prop="mobile" label="手机号" width="180" :formatter="formatSex" sortable>
 			</el-table-column>
 			<el-table-column prop="age" label="归属顾问" width="180" sortable>
 			</el-table-column>
-			<el-table-column prop="birth" label="注册时间" width="180" sortable>
+			<el-table-column prop="createTime" label="注册时间" width="180" sortable>
 			</el-table-column>
-			<el-table-column prop="addr" label="状态" min-width="180" sortable>
+			<el-table-column prop="state" label="状态" min-width="180" sortable>
 			</el-table-column>
 			<el-table-column label="操作" width="150">
 				<template scope="scope">
@@ -108,7 +108,7 @@
 <script>
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
-	import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
+	import { getConsultancyList, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
 
 	export default {
 		data() {
@@ -169,17 +169,28 @@
 			//获取用户列表
 			getUsers() {
 				let para = {
-					page: this.page,
-					name: this.filters.name
-				};
+					url:"59cbb548336a522ad06efe7e",
+					data:{} 
+				} 
 				this.listLoading = true;
 				//NProgress.start();
-				getUserListPage(para).then((res) => {
-					this.total = res.data.total;
-					this.users = res.data.users;
-					this.listLoading = false;
-					//NProgress.done();
+				getConsultancyList(para).then((res) => {
+					this.total =2;
+					this.users = res.data.counselors;
+					this.listLoading = false; 
 				});
+				// let para = {
+				// 	page: this.page,
+				// 	name: this.filters.name
+				// };
+				// this.listLoading = true;
+				// //NProgress.start();
+				// getUserListPage(para).then((res) => {
+				// 	this.total = res.data.total;
+				// 	this.users = res.data.users;
+				// 	this.listLoading = false;
+				// 	//NProgress.done();
+				// });
 			},
 			//删除
 			handleDel: function (index, row) {
