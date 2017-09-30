@@ -10,9 +10,13 @@ import Page5 from './views/nav2/Page5.vue'
 import Page6 from './views/nav3/Page6.vue'
 import echarts from './views/charts/echarts.vue'
 import CustomerManagement from './views/UserManagement/CustomerManagement.vue'
+import CustomerDetails from './views/UserManagement/CustomerDetails.vue'
 import UserManagement from './views/UserManagement/UserManagement.vue'
+// import UserManagement from './views/UserManagement/UserDetails.vue'
 import BuyingManagement from './views/UserManagement/BuyingManagement.vue'
+import BuyingDetails from './views/UserManagement/BuyingDetails.vue'
 import ConsultancyManagement from './views/UserManagement/ConsultancyManagement.vue'
+import ConsultancyDetails from './views/UserManagement/ConsultancyDetails.vue'
 import GoodsManagement from './views/GoodsManagement/GoodsManagement.vue'
 import GoodsAdd from './views/GoodsManagement/GoodsAdd.vue'
 
@@ -197,7 +201,7 @@ let routes = [
         name: '顾客管理',
         hidden: true,
         children: [
-            { path: '/BuyingDetails', component: Table, name: '买手详情' }
+            { path: '/BuyingDetails', component: BuyingDetails, name: '买手详情' }
         ]
     }, 
     {
@@ -212,11 +216,11 @@ let routes = [
     },
     {
         path: '/ConsultancyDetails',
-        component: ConsultancyManagement,
+        component: Home,
         name: '顾问管理',
         hidden: true,
         children: [
-            { path: '/ConsultancyDetails', component: Table, name: '顾问详情' }
+            { path: '/ConsultancyDetails', component: ConsultancyDetails, name: '顾问详情' }
         ]
     }, 
     

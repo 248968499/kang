@@ -22,12 +22,33 @@ module.exports = {
     bundleAnalyzerReport: process.env.npm_config_report
   },
   dev: {
-    env: require('./dev.env'),
-    port: 8080,
-    autoOpenBrowser: true,
-    assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
-    proxyTable: {},
+    // env: require('./dev.env'),
+    // port: 8080,
+    // autoOpenBrowser: true,
+    // assetsSubDirectory: 'static',
+    // assetsPublicPath: '/',
+    // proxyTable: {
+    //   '/api': {
+    //     target: '',
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //       '^/api': '/'
+    //     }
+    //   }
+      env: require('./dev.env'), // 使用 config/dev.env.js 中定义的编译环境
+      port: 8080, // 运行测试页面的端口
+      autoOpenBrowser: true, 
+      assetsSubDirectory: 'static', // 编译输出的二级目录
+      assetsPublicPath: '/', // 编译发布的根目录，可配置为资源服务器域名或 CDN 域名
+      proxyTable: {  // 需要 proxyTable 代理的接口（可跨域） 
+          '/api': {
+              target: 'http://121.43.35.110:9000/',
+              changeOrigin: true,
+              pathRewrite: {
+                  '^/api': '/'
+              }
+          }
+    },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)

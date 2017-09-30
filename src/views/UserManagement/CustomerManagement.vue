@@ -108,7 +108,7 @@
 <script>
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
-	import { getConsultancyList, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
+	import { getUserList } from '../../api/api'; 
 
 	export default {
 		data() {
@@ -168,16 +168,17 @@
 			},
 			//获取用户列表
 			getUsers() {
-				let para = {
-					url:"59cbb548336a522ad06efe7e",
+					let para = {
+					param:"MASTER",//角色[COUNSELOR:顾问，MASTER:达人,BUYER:买手]
 					data:{} 
 				} 
 				this.listLoading = true;
 				//NProgress.start();
-				getConsultancyList(para).then((res) => {
-					this.total =2;
-					this.users = res.data.counselors;
+				getUserList(para).then((res) => {
+					this.total = 20;
+					this.users = res.data;
 					this.listLoading = false; 
+					console.log(res)
 				});
 				// let para = {
 				// 	page: this.page,

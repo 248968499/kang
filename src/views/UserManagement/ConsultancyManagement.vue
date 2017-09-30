@@ -119,8 +119,7 @@
 	import util from '../../common/js/util' 
 	
 	//import NProgress from 'nprogress'
-	import { getConsultancyList, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
-	// import FormatDate from '../../api/date';
+	import { getUserList } from '../../api/api'; 
 
 	export default {
 		data() {
@@ -194,16 +193,18 @@
 				 
 //   axios.get(`api/api/counselors/59cbb548336a522ad06efe7e`);
 //  return;
+
 				let para = {
-					url:"59cbb548336a522ad06efe7e",
+					param:"COUNSELOR",//角色[COUNSELOR:顾问，MASTER:达人,BUYER:买手]
 					data:{} 
 				} 
 				this.listLoading = true;
 				//NProgress.start();
-				getConsultancyList(para).then((res) => {
+				getUserList(para).then((res) => {
 					this.total = 20;
-					this.users = res.data.counselors;
+					this.users = res.data;
 					this.listLoading = false; 
+					console.log(res)
 				});
 			},
 			//删除
