@@ -44,7 +44,15 @@
         this.$refs.ruleForm2.resetFields();
       },
       handleSubmit2(ev) {
-        debugger;
+        var user= {
+    id: 1,
+    username: 'admin',
+    password: '123456',
+    avatar: 'https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png',
+    name: '张某某'
+  }
+         sessionStorage.setItem('user', JSON.stringify(user));
+                this.$router.push({ path: '/CustomerManagement' });
         var _this = this;
         this.$refs.ruleForm2.validate((valid) => {
           if (valid) {
