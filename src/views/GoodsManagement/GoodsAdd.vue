@@ -12,7 +12,7 @@
       <el-input v-model="form.name"></el-input> 
   </el-form-item>  
   <el-form-item label="产品价格：" label-width="100px"> 
-    <el-input v-model="form.name"></el-input> 
+    <el-input v-model="form.price"></el-input> 
   </el-form-item>  
   <el-form-item label="发布人" label-width="100px">
     <el-select v-model="form.region" placeholder="请选择">
@@ -23,16 +23,16 @@
   </el-form-item>
   <el-form-item label="品牌名称" label-width="100px">
     <el-select v-model="form.region" placeholder="请选择">
-      <el-option label="时尚达人" value="shanghai"></el-option>
-      <el-option label="高级时尚顾问" value="beijing"></el-option>
-      <el-option label="初级时尚顾问" value="beijing"></el-option>
+      <el-option label="品牌1" value="1"></el-option>
+      <el-option label="品牌2" value="2"></el-option>
+      <el-option label="品牌3" value="3"></el-option>
     </el-select>
   </el-form-item>
   <el-form-item label="商品类目" label-width="100px">
     <el-select v-model="form.region" placeholder="请选择">
-      <el-option label="时尚达人" value="shanghai"></el-option>
-      <el-option label="高级时尚顾问" value="beijing"></el-option>
-      <el-option label="初级时尚顾问" value="beijing"></el-option>
+      <el-option label="类目1" value="1"></el-option>
+      <el-option label="类目2" value="2"></el-option>
+      <el-option label="类目3" value="3"></el-option>
     </el-select>
  </el-form-item>
    <el-form-item label="尺码：" label-width="100px">
@@ -48,7 +48,7 @@
     <el-label>库存:<el-input-number v-model="num5" :disabled="cnum5==false" :min="0" :max="100000"></el-input-number></el-label>
   </el-form-item>
   <el-form-item>
-    <el-button>取消</el-button>
+    <el-button @click="goBack()">取消</el-button>
     <el-button type="primary" @click="onSubmit">保存
     </el-button>
   </el-form-item></el-col></el-row> 
@@ -67,6 +67,7 @@
         list-type="picture-card"
         :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove">
+         <img width="180" height="180" hidden="form.img==''" src="https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png" />
         <i class="el-icon-plus" ></i>
       </el-upload>
   </el-form-item>
@@ -75,12 +76,12 @@
   type="textarea"
   :rows="2"
   placeholder="请输入内容"
-  v-model="textarea">
+  v-model="form.description">
 </el-input>
   </el-form-item>
  
   <el-form-item>
-    <el-button>取消</el-button>
+    <el-button @click="goBack()">取消</el-button>
     <el-button type="primary" @click="onSubmit">保存
     </el-button>
   </el-form-item></el-col></el-row> 
@@ -93,10 +94,6 @@
 </el-dialog>
 	</section>
 </template>
-<script src="https://unpkg.com/vue/dist/vue.js"></script>
-        <!-- 引入element JS -->
-        <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-        <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.js"></script>
 <script>
   export default {
     data() {
@@ -113,14 +110,12 @@
         cnum5:false,
         activeName: 'first',
         form: {
+          img:'',
           name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
+          price:'',
+          stockNum:0,
+          description:''
+         
         },
          tableData: [{
             date: '2016-05-02',
@@ -142,8 +137,23 @@
       }
     },
     methods: {
+       goBack() {
+				this.$router.go(-1);
+			},
       onSubmit() {
-        console.log('submit!');
+        let para = {
+              data:Object.assign({}, this.form)
+            } 
+       if(this.pageType=="edit"){
+          para.param= "59cbb548336a522ad06efe7e"; 
+          	editGoodsDetails(para).then((res) => { 
+			    	});
+           }else{
+            addGoodsDetails(para).then((res) => { 
+              
+                  });
+
+       }
       } ,
        handleRemove(file, fileList) {
         console.log(file, fileList);
@@ -156,7 +166,21 @@
         let checkedCount = value.length;
         this.checkAll = checkedCount === this.cities.length;
         this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+      },
+    created: function() { 
+      var that=this;
+      that.pageType=that.$router.currentRoute.query.pageType;
+        
+      if(that.pageType=="edit"){
+        	let para = {
+           token:"59cbb548336a522ad06efe7e",
+           goodsid:that.$router.currentRoute.query.goodsid
+        } 
+				getGoodDetails(para).then((res) => { 
+        that.form  =res.data;
+				});
       }
+		}
     }
   }
 </script>
