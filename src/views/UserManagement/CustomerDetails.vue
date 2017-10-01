@@ -1,7 +1,7 @@
 
   <template>
 	<section>
-        <el-tabs v-model="activeName" @tab-click="handleClick">
+       <el-tabs v-model="activeName" @tab-click="handleClick">
     <el-tab-pane label="顾客详情" name="CustomerDetails">
         <el-form ref="form" :model="form" label-width="80px">
             <el-row>
@@ -15,28 +15,28 @@
   </el-form-item>  </el-col>
   <el-col :span="6">
        <el-form-item label="昵称："> 
-					<el-input  placeholder=""></el-input> 
+					<el-input v-model="form.nickName"  placeholder=""></el-input> 
   </el-form-item> 
   <br>
        <el-form-item label="姓名："> 
-					<el-input  placeholder=""></el-input> 
+					<el-input   v-model="form.name"  placeholder=""></el-input> 
   </el-form-item> 
   <br>
        <el-form-item label="电话："> 
-					<el-input  placeholder=""></el-input> 
+					<el-input  v-model="form.mobile"  placeholder=""></el-input> 
   </el-form-item> 
    </el-col>
   <el-col :span="4">
         <el-form-item label="生日："> 
-					<el-input  placeholder=""></el-input> 
+					<el-input  v-model="form.mobile"  placeholder=""></el-input> 
   </el-form-item> 
   <br>
        <el-form-item label="所在地"> 
-					<el-input  placeholder=""></el-input> 
+					<el-input   v-model="form.address" placeholder=""></el-input> 
   </el-form-item> 
   <br>
        <el-form-item label="注册日期"> 
-					<el-input  placeholder=""></el-input> 
+					<el-input  v-model="form.createTime"  placeholder=""></el-input> 
   </el-form-item> 
    </el-col>
   
@@ -79,7 +79,7 @@
                      </el-form-item> 
                 </el-col>
                 <el-col :span="8"> 
-                <el-button>返回</el-button>
+                <el-button @click="goBack()">返回</el-button>
                 <el-button type="primary" @click="onSubmit">保存</el-button> 
                 </el-col>
                 <el-col :span="8"> 
@@ -109,20 +109,45 @@
   </el-tabs>
 	</section>
 </template>
-<script>
+<script> 
+
+	import util from '../../common/js/util'
+	import { getUserDetails,addUserDetails,editUserDetails,getOrderList } from '../../api/api'; 
   export default {
     data() {
       return {
-           activeName: 'CustomerDetails',
-        form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
+           activeName: 'CustomerDetails', 
+           listLoading:false, 
+         form:{   
+              id: "",
+              createTime: "",
+              nickName: "",
+              redPacket: 0,
+              name: "",
+              cover: "",
+              mobile: "",
+              state: false,
+              role: "MASTER",
+              openId: "",
+              avatar: "",
+              motto: "",
+              address: "",
+              followNum: 0,
+              balance: 0
+          },
+           OrderList: {
+            goods:{},
+            money:123.00,
+            goodsNum:2,//商品数量
+            receiver:{},
+            pay:true,//是否支付
+            state:"UNSEND",//未付款 NONE, 未发货 UNSEND,未收获 UNRECEIVED,已完成 FINISH
+            detial:"",
+            user:{},
+            message:"留言",
+            distributionType:"配送方式",
+            expressCompany:"快递公司",
+            expressNo:"23141234123cdssfd"//单号
         },
          tableData: [{
             date: '2016-05-02',
@@ -144,9 +169,54 @@
       }
     },
     methods: {
-      onSubmit() {
-        console.log('submit!');
+      goBack() {
+				this.$router.go(-1);
+			},
+      onSubmit() { 
+       console.log(this.pageType); 
+    let para = {
+           data:Object.assign({}, this.form)
+        } 
+       if(this.pageType=="edit"){
+          para.param= "59cbb548336a522ad06efe7e"; 
+          	editUserDetails(para).then((res) => { 
+  // this.form  =res.data;
+  // this.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
+				});
+
+       }else{
+	addUserDetails(para).then((res) => { 
+  // this.form  =res.data;
+  // this.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
+				});
+
+       }
+      }, 
+      handleClick(tab, event) {
+        	getOrderList(para).then((res) => { 
+  that.form  =res.data;
+  that.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
+				});
+        console.log(tab, event);
+      },
+    },
+    created: function() { 
+      var that=this;
+     that.pageType=that.$router.currentRoute.query.pageType;
+  // var token=that.$router.currentRoute.query.token;
+
+        	let para = {
+           param:"59cbb548336a522ad06efe7e"
+        } 
+      if(that.pageType=="edit"){
+         
+				// this.listLoading = true;
+				//NProgress.start();
+				getUserDetails(para).then((res) => { 
+  that.form  =res.data;
+  that.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
+				});
       }
-    }
+		}
   }
 </script>

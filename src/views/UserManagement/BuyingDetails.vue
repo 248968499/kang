@@ -15,28 +15,28 @@
   </el-form-item>  </el-col>
   <el-col :span="6">
        <el-form-item label="昵称："> 
-					<el-input  placeholder=""></el-input> 
+					<el-input  v-model="form.nickName" placeholder=""></el-input> 
   </el-form-item> 
   <br>
        <el-form-item label="姓名："> 
-					<el-input  placeholder=""></el-input> 
+					<el-input v-model="form.name"  placeholder=""></el-input> 
   </el-form-item> 
   <br>
        <el-form-item label="电话："> 
-					<el-input  placeholder=""></el-input> 
+					<el-input v-model="form.mobile"  placeholder=""></el-input> 
   </el-form-item> 
    </el-col>
   <el-col :span="4">
-        <el-form-item label="产品数："> 
+        <el-form-item  v-model="form.name" label="产品数："> 
 					1220
   </el-form-item> 
   <br>
        <el-form-item label="所在地"> 
-					<el-input  placeholder=""></el-input> 
+					<el-input  v-model="form.address" placeholder=""></el-input> 
   </el-form-item> 
   <br>
        <el-form-item label="注册日期"> 
-					<el-input  placeholder=""></el-input> 
+					<el-input  v-model="form.createTime" placeholder=""></el-input> 
   </el-form-item> 
    </el-col>
   
@@ -60,7 +60,7 @@
                      </el-form-item> 
                 </el-col>
                 <el-col :span="8"> 
-                <el-button>返回</el-button>
+                <el-button @click="goBack()">返回</el-button>
                 <el-button type="primary" @click="onSubmit">保存</el-button> 
                 </el-col>
                 <el-col :span="8"> 
@@ -76,43 +76,73 @@
 	</section>
 </template>
 <script>
+	import util from '../../common/js/util'
+	import { getUserDetails,addUserDetails,editUserDetails } from '../../api/api'; 
   export default {
     data() {
       return {
-           activeName: 'BuyingDetails',
-        form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
-        },
-         tableData: [{
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-04',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1517 弄'
-          }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1519 弄'
-          }, {
-            date: '2016-05-03',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1516 弄'
-          }]
+           activeName: 'BuyingDetails', 
+         form:{   
+              id: "",
+              createTime: "",
+              nickName: "",
+              redPacket: 0,
+              name: "",
+              cover: "",
+              mobile: "",
+              state: false,
+              role: "BUYER",
+              openId: "",
+              avatar: "",
+              motto: "",
+              address: "",
+              followNum: 0,
+              balance: 0
+          },
       }
     },
     methods: {
-      onSubmit() {
-        console.log('submit!');
+      goBack() {
+				this.$router.go(-1);
+			},
+      onSubmit() { 
+       console.log(this.pageType); 
+    let para = {
+           data:Object.assign({}, this.form)
+        } 
+       if(this.pageType=="edit"){
+          para.param= "59cbb548336a522ad06efe7e"; 
+          	editUserDetails(para).then((res) => { 
+  // this.form  =res.data;
+  // this.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
+				});
+
+       }else{
+	addUserDetails(para).then((res) => { 
+  // this.form  =res.data;
+  // this.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
+				});
+
+       }
+      }, 
+      handleClick(tab, event) {
+        console.log(tab, event);
+      },
+    },
+    created: function() {  
+     this.pageType=this.$router.currentRoute.query.pageType;
+        	let para = {
+           param:"59cbb548336a522ad06efe7e"
+        } 
+      if(this.pageType=="edit"){ 
+				// this.listLoading = true;
+				//NProgress.start();
+				getUserDetails(para).then((res) => { 
+      
+  this.form  =res.data;
+  this.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
+				});
       }
-    }
+		}
   }
 </script>

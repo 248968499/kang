@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import { requestLogin } from '../api/api';
+  import { login } from '../api/api';
   //import NProgress from 'nprogress'
   export default {
     data() {
@@ -44,41 +44,22 @@
         this.$refs.ruleForm2.resetFields();
       },
       handleSubmit2(ev) {
-        var user= {
-    id: 1,
-    username: 'admin',
-    password: '123456',
-    avatar: 'https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png',
-    name: '张某某'
-  }
-         sessionStorage.setItem('user', JSON.stringify(user));
-                this.$router.push({ path: '/CustomerManagement' });
-        var _this = this;
-        this.$refs.ruleForm2.validate((valid) => {
-          if (valid) {
+     
+       
+        var _this = this; 
             //_this.$router.replace('/table');
             this.logining = true;
             //NProgress.start();
-            var loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass };
-            requestLogin(loginParams).then(data => {
-              this.logining = false;
-              //NProgress.done();
-              let { msg, code, user } = data;
-              if (code !== 200) {
-                this.$message({
-                  message: msg,
-                  type: 'error'
-                });
-              } else {
-                sessionStorage.setItem('user', JSON.stringify(user));
-                this.$router.push({ path: '/CustomerManagement' });
-              }
-            });
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
+     var  params={ data : {
+                openId:"o10ngjojdB9nEYqAyrUr_Nv0cyP4",
+                nickName:"小贝",
+                unionid:"o10ngjojdB9nEYqAyrUr_Nv0cyP4"
+            }}
+            login(params).then(data => {
+              this.logining = false; 
+                 sessionStorage.setItem('token',data.data);
+                this.$router.push({ path: '/CustomerManagement' }); 
+            }); 
       }
     }
   }

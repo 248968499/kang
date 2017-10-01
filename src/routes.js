@@ -182,7 +182,7 @@ let routes = [
         name: '顾客管理',
         hidden: true,
         children: [
-            { path: '/CustomerDetails', component: Table, name: '顾客详情' }
+            { path: '/CustomerDetails', component: CustomerDetails, name: '顾客详情' }
         ]
     }, 
     {

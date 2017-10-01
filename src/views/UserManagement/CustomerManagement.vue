@@ -3,6 +3,9 @@
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters">
+				<el-form-item>
+					<el-button type="primary" v-on:click="addUser">添加</el-button>
+				</el-form-item>
 				<el-form-item label="注册时间">
 					<el-input v-model="filters.startDateTime" placeholder=""></el-input>
 				</el-form-item> 
@@ -34,7 +37,7 @@
 			</el-table-column>
 			<el-table-column label="操作" width="150">
 				<template scope="scope">
-					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">详情</el-button>
+					<el-button size="small" @click="editUser(scope.$index, scope.row)">详情</el-button>
 					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
@@ -48,7 +51,7 @@
 		</el-col>
 
 		<!--编辑界面-->
-		<el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
+		<!-- <el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
 				<el-form-item label="姓名" prop="name">
 					<el-input v-model="editForm.name" auto-complete="off"></el-input>
@@ -73,10 +76,9 @@
 				<el-button @click.native="editFormVisible = false">取消</el-button>
 				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
 			</div>
-		</el-dialog>
-
+		</el-dialog> --> 
 		<!--新增界面-->
-		<el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false">
+		<!-- <el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false">
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
 				<el-form-item label="姓名" prop="name">
 					<el-input v-model="addForm.name" auto-complete="off"></el-input>
@@ -101,14 +103,14 @@
 				<el-button @click.native="addFormVisible = false">取消</el-button>
 				<el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
 			</div>
-		</el-dialog>
+		</el-dialog> -->
 	</section>
 </template>
 
 <script>
 	import util from '../../common/js/util'
-	//import NProgress from 'nprogress'
-	import { getUserList } from '../../api/api'; 
+	//import NProgress from 'nprogress' this.$route.query.receiveID
+	import { getUserList,login } from '../../api/api'; 
 
 	export default {
 		data() {
@@ -174,7 +176,7 @@
 				} 
 				this.listLoading = true;
 				//NProgress.start();
-				getUserList(para).then((res) => {
+				getUserList(para).then((res) => { 
 					this.total = 20;
 					this.users = res.data;
 					this.listLoading = false; 
@@ -214,10 +216,23 @@
 
 				});
 			},
-			//显示编辑界面
-			handleEdit: function (index, row) {
-                 
-                this.$router.push({ path: '/CustomerDetails'}); 
+			addUser:function () { 
+				var pageType="add";
+				 this.$router.push({ path: '/CustomerDetails',  query: { pageType:"add"}}) 
+			}, 
+			editUser: function (index, row) {                 
+    //   var  params={ data : {
+    //             openId:row.openId,
+    //             nickName:row.nickName,
+    //             unionid:row.unionid
+    //         }}
+    //         login(params).then(data => {
+	// 		var	token=data.data.token;
+               
+             
+	// 		}); 
+			 this.$router.push({ path: '/CustomerDetails', query: {pageType:"edit"}}); 
+			// this.$router.push({ path: '/CustomerDetails', query: {pageType:"edit",token:token}}); 
 				// this.editFormVisible = true;
 				// this.editForm = Object.assign({}, row);
 			},
