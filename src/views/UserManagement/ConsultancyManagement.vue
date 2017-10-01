@@ -147,10 +147,21 @@
 				this.listLoading = true;
 				//NProgress.start();
 				getUserList(para).then((res) => {
+					
+					if(res.statusText=="OK"){ 
+						this.$message({ 
+							message: '加载成功',
+							type: 'success'
+						});   
 					this.total = 20;
 					this.users = res.data;
-					this.listLoading = false; 
-					console.log(res)
+					this.listLoading = false;  
+					}else{
+						this.$message({
+							message: '加载失败',
+							type: 'warning'
+						});  
+					}
 				});
 			}, 
 			//删除
@@ -162,6 +173,7 @@
 					//NProgress.start();
 					let para = { id: row.id };
 					removeUser(para).then((res) => {
+						if(res.s)
 						this.listLoading = false;
 						//NProgress.done();
 						this.$message({
@@ -178,11 +190,21 @@
  				this.$router.push({ path: '/ConsultancyDetails', query: {pageType:"add"}}) 
 			}, 
 			editUser: function (index, row) {
-
-              this.$router.push({ path: '/ConsultancyDetails', query: {pageType:"edit"}}) 
-				// this.$route.params.type
-				// this.editFormVisible = true;
-				// this.editForm = Object.assign({}, row);
+		this.listLoading = true;                
+			var  params={ data : {
+						openId:row.openId,
+						nickName:row.nickName,
+						unionid:row.unionid
+					}}
+					login(params).then(res => {
+						  if(res.statusText=="OK"){
+						this.listLoading = true;
+					var	token=data.data.token; 
+					this.$router.push({ path: '/ConsultancyDetails', query: {pageType:"edit",token:token}}); 
+						  }else{
+							  
+						  }
+					});  
 			},
 			//显示新增界面
 			handleAdd: function () {

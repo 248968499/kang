@@ -122,17 +122,32 @@
        if(this.pageType=="edit"){
           para.param=sessionStorage.getItem('token');// "59cbb548336a522ad06efe7e"; 
           	editUserDetails(para).then((res) => {  
-              
-        that.Loading=false;
-              that.showMessage("保存成功","success")
-              that.goBack()
+              if(res.statusText=="OK"){  
+                that.Loading=false; 
+                 this.$message({
+                    message: "保存成功",
+                    type: "success"
+                  }); 
+                that.goBack()
+                }else{  
+                 this.$message({
+                    message: "保存失败",
+                    type: "warning"
+                  }); 
+              }
             	});
 
        }else{
 	addUserDetails(para).then((res) => { 
+     if(res.statusText=="OK"){  
               that.Loading=false;
               that.showMessage("添加成功","success") ;
-              that.goBack() 
+              that.goBack() }else{  
+                 this.$message({
+                    message: "保存失败",
+                    type: "warning"
+                  }); 
+              }
 				});
        }
       }, 
@@ -150,9 +165,15 @@
 				 that.Loading = true;
 				//NProgress.start();
 				getUserDetails(para).then((res) => {
+           if(res.statusText=="OK"){   
+             
+                that.showMessage("加载成功","warning") ; 
           this.form  =res.data;
           this.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');
           that.Loading = false;
+          }else{  
+                that.showMessage("加载失败","warning") ; 
+              }
 				});
       }
 		}

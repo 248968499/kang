@@ -177,10 +177,21 @@
 				this.listLoading = true;
 				//NProgress.start();
 				getUserList(para).then((res) => { 
+
+					if(res.statusText=="OK"){ 
+						this.$message({ 
+							message: '加载成功',
+							type: 'success'
+						});   
 					this.total = 20;
 					this.users = res.data;
-					this.listLoading = false; 
-					console.log(res)
+					this.listLoading = false;  
+					}else{
+						this.$message({
+							message: '加载失败',
+							type: 'warning'
+						});  
+					}
 				});
 				// let para = {
 				// 	page: this.page,
@@ -220,19 +231,19 @@
 				var pageType="add";
 				 this.$router.push({ path: '/CustomerDetails',  query: { pageType:"add"}}) 
 			}, 
-			editUser: function (index, row) {                 
+			editUser: function (index, row) {
+				 this.listLoading = true;                
     //   var  params={ data : {
     //             openId:row.openId,
     //             nickName:row.nickName,
     //             unionid:row.unionid
     //         }}
     //         login(params).then(data => {
-	// 		var	token=data.data.token;
-               
-             
-	// 		}); 
+	// 			this.listLoading = true;
+	// 		var	token=data.data.token; 
+	// 		 this.$router.push({ path: '/CustomerDetails', query: {pageType:"edit",token:token}}); 
+	// 		 }); 
 			 this.$router.push({ path: '/CustomerDetails', query: {pageType:"edit"}}); 
-			// this.$router.push({ path: '/CustomerDetails', query: {pageType:"edit",token:token}}); 
 				// this.editFormVisible = true;
 				// this.editForm = Object.assign({}, row);
 			},

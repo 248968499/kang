@@ -20,6 +20,11 @@ export const editUserDetails  = params => { return axios.post(`api/api/user/prof
 export const fileUpload  = params => { return axios.post(`api/api/file/upload`+ (params.param||""),params.data ); };//, 
 //http://121.43.35.110:9000/api/user/qrcode/59cbb548336a522ad06efe7e
 export const getQrcode  = params => { return axios.get(`api/api/user/qrcode/`+ (params.param||""),{params: params.data  }); };//, 
+//http://121.43.35.110:9000/api/user/add/tips/59cbb548336a522ad06efe7e
+export const addTips  = params => { return axios.get(`api/api/user/add/tips/`+ (params.param||""),{params: params.data  }); };//, 
+
+//user/delete/tips/{token}/{tipId}
+export const delTips  = params => { return axios.get(`api/api/user/delete/tips/`+ (params.param||""),{params: params.data  }); };//, 
 
 // export const getUserListPage = params => { return axios.get(`api/api/counselors/`+ params.url,{params: params.data  }); };//, 
 

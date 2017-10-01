@@ -59,7 +59,7 @@
                      </el-form-item> 
                 </el-col>
                 <el-col :span="20"> <br><br><br>
-                <el-tag>标签一</el-tag>
+                <el-tag :v-for="10">标签一</el-tag>
 <el-tag type="gray">标签二</el-tag>
 <el-tag type="primary">标签三</el-tag>
 <el-tag type="success">标签四</el-tag>
@@ -187,16 +187,25 @@
        if(this.pageType=="edit"){
           para.param= sessionStorage.getItem('token');//"59cbb548336a522ad06efe7e"; 
           	editUserDetails(para).then((res) => {  
+              
+          if(res.statusText=="OK"){
 						 	that.Loading = false;
               that.showMessage("保存成功","success")
-              that.goBack() ;
+              that.goBack() ; 
+              }else{ 
+                that.showMessage("添加失败","warning") ;
+            }
             });
 
        }else{
         addUserDetails(para).then((res) => { 
+          if(res.statusText=="OK"){
             that.Loading = false;
             that.showMessage("添加成功","success") ;
             that.goBack() ;
+            }else{ 
+            that.showMessage("添加失败","warning") ;
+            }
         });
 
        }
@@ -213,7 +222,7 @@
       var that=this;
      that.pageType=that.$router.currentRoute.query.pageType;
   // var token=that.$router.currentRoute.query.token;
-
+debugger
         	let para = {
            param:sessionStorage.getItem('token')//"59cbb548336a522ad06efe7e"
         } 
@@ -222,9 +231,15 @@
 				 that.Loading = true;
 				//NProgress.start();
 				getUserDetails(para).then((res) => { 
-  that.form  =res.data;
-  that.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
-         that.Loading = false;
+          
+          if(res.statusText=="OK"){
+             that.showMessage("加载成功","success") ;
+              that.form  =res.data;
+              that.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
+            that.Loading = false;
+          }else{ 
+            that.showMessage("加载失败","warning") ;
+          }
        });
         
       }else{

@@ -39,26 +39,35 @@
         checked: true
       };
     },
-    methods: {
+    methods: { 
+      showMessage(message,success){
+      this.$message({
+							message: message,
+							type: success
+						});
+      },
       handleReset2() {
         this.$refs.ruleForm2.resetFields();
       },
-      handleSubmit2(ev) {
-     
-       
-        var _this = this; 
-            //_this.$router.replace('/table');
-            this.logining = true;
-            //NProgress.start();
-     var  params={ data : {
-                openId:"o10ngjojdB9nEYqAyrUr_Nv0cyP4",
-                nickName:"小贝",
-                unionid:"o10ngjojdB9nEYqAyrUr_Nv0cyP4"
-            }}
-            login(params).then(data => {
-              this.logining = false; 
-                 sessionStorage.setItem('token',data.data);
+      handleSubmit2(ev) { 
+        var _this = this;  
+            _this.logining = true; 
+            var  params={ data : {
+                        openId:"o10ngjojdB9nEYqAyrUr_Nv0cyP4",
+                        nickName:"小贝",
+                        unionid:"o10ngjojdB9nEYqAyrUr_Nv0cyP4"
+                    }}
+            login(params).then(data => { 
+             if(data.statusText&&data.statusText=="OK"){
+              _this.logining = false;  
+              _this.showMessage("登陆成功","success");
+                 sessionStorage.setItem('token',data.data.token);
                 this.$router.push({ path: '/CustomerManagement' }); 
+                }else
+                { 
+              _this.logining = false;  
+              _this.showMessage("登陆失败","warning");
+                }
             }); 
       }
     }
