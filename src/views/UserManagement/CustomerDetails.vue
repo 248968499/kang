@@ -2,44 +2,43 @@
   <template>
 	<section>
        <el-tabs v-model="activeName" @tab-click="handleClick">
-    <el-tab-pane label="顾客详情" name="CustomerDetails">
+    <el-tab-pane label="顾客详情" v-loading="Loading" name="CustomerDetails">
         <el-form ref="form" :model="form" label-width="80px">
             <el-row>
                 <el-col :span="1"> 
                      <el-form-item> 
                      </el-form-item> 
                 </el-col>
-  <el-col :span="4">
-       <el-form-item> 
-    <img width="180" height="180" src="https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png" />
-  </el-form-item>  </el-col>
-  <el-col :span="6">
-       <el-form-item label="昵称："> 
-					<el-input v-model="form.nickName"  placeholder=""></el-input> 
-  </el-form-item> 
-  <br>
-       <el-form-item label="姓名："> 
-					<el-input   v-model="form.name"  placeholder=""></el-input> 
-  </el-form-item> 
-  <br>
-       <el-form-item label="电话："> 
-					<el-input  v-model="form.mobile"  placeholder=""></el-input> 
-  </el-form-item> 
-   </el-col>
-  <el-col :span="4">
-        <el-form-item label="生日："> 
-					<el-input  v-model="form.mobile"  placeholder=""></el-input> 
-  </el-form-item> 
-  <br>
-       <el-form-item label="所在地"> 
-					<el-input   v-model="form.address" placeholder=""></el-input> 
-  </el-form-item> 
-  <br>
-       <el-form-item label="注册日期"> 
-					<el-input  v-model="form.createTime"  placeholder=""></el-input> 
-  </el-form-item> 
-   </el-col>
-  
+                <el-col :span="4">
+                    <el-form-item> 
+                  <img width="180" height="180" src="https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png" />
+                </el-form-item>  </el-col>
+                <el-col :span="6">
+                    <el-form-item label="昵称："> 
+                        <el-input v-model="form.nickName"  placeholder=""></el-input> 
+                </el-form-item> 
+                <br>
+                    <el-form-item label="姓名："> 
+                        <el-input   v-model="form.name"  placeholder=""></el-input> 
+                </el-form-item> 
+                <br>
+                    <el-form-item label="电话："> 
+                        <el-input  v-model="form.mobile"  placeholder=""></el-input> 
+                </el-form-item> 
+                </el-col>
+                <el-col :span="4">
+                      <el-form-item label="生日："> 
+                        <el-input  v-model="form.mobile1"  placeholder=""></el-input> 
+                </el-form-item> 
+                <br>
+                    <el-form-item label="所在地"> 
+                        <el-input   v-model="form.address" placeholder=""></el-input> 
+                </el-form-item> 
+                <br>
+                    <el-form-item label="注册日期"> 
+                        <el-input disabled="true" v-model="form.createTime"  placeholder=""></el-input> 
+                </el-form-item> 
+                </el-col> 
                 <el-col :span="4"> 
                      <el-form-item> 
                      </el-form-item> 
@@ -117,7 +116,7 @@
     data() {
       return {
            activeName: 'CustomerDetails', 
-           listLoading:false, 
+           Loading:false, 
          form:{   
               id: "",
               createTime: "",
@@ -133,7 +132,8 @@
               motto: "",
               address: "",
               followNum: 0,
-              balance: 0
+              balance: 0//,
+            //  tips:["时尚","aaa","bbb"]
           },
            OrderList: {
             goods:{},
@@ -171,24 +171,33 @@
     methods: {
       goBack() {
 				this.$router.go(-1);
-			},
+      },
+      showMessage(message,success){
+      this.$message({
+							message: message,
+							type: success
+						});
+      },
       onSubmit() { 
-       console.log(this.pageType); 
+        var that=this;
+        	that.Loading = true;
     let para = {
            data:Object.assign({}, this.form)
         } 
        if(this.pageType=="edit"){
-          para.param= "59cbb548336a522ad06efe7e"; 
-          	editUserDetails(para).then((res) => { 
-  // this.form  =res.data;
-  // this.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
-				});
+          para.param= sessionStorage.getItem('token');//"59cbb548336a522ad06efe7e"; 
+          	editUserDetails(para).then((res) => {  
+						 	that.Loading = false;
+              that.showMessage("保存成功","success")
+              that.goBack() ;
+            });
 
        }else{
-	addUserDetails(para).then((res) => { 
-  // this.form  =res.data;
-  // this.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
-				});
+        addUserDetails(para).then((res) => { 
+            that.Loading = false;
+            that.showMessage("添加成功","success") ;
+            that.goBack() ;
+        });
 
        }
       }, 
@@ -206,16 +215,20 @@
   // var token=that.$router.currentRoute.query.token;
 
         	let para = {
-           param:"59cbb548336a522ad06efe7e"
+           param:sessionStorage.getItem('token')//"59cbb548336a522ad06efe7e"
         } 
       if(that.pageType=="edit"){
          
-				// this.listLoading = true;
+				 that.Loading = true;
 				//NProgress.start();
 				getUserDetails(para).then((res) => { 
   that.form  =res.data;
   that.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
-				});
+         that.Loading = false;
+       });
+        
+      }else{
+         that.form.createTime=new Date();
       }
 		}
   }

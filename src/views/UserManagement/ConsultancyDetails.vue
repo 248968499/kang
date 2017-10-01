@@ -2,49 +2,38 @@
   <template>
 	<section>
         <el-tabs v-model="activeName" @tab-click="handleClick">
-    <el-tab-pane label="顾问详情" name="ConsultancyDetails">
+    <el-tab-pane label="顾问详情"  v-loading="Loading" name="ConsultancyDetails">
         <el-form ref="form" :model="form" label-width="80px">
              <el-row> 
             <el-col :span="1">
    <el-form-item></el-form-item>
    </el-col> <el-col :span="7">
-  <el-form-item label="头像：" label-width="100px">
-      <el-upload 
-  action="https://jsonplaceholder.typicode.com/posts/"
-  list-type="picture-card"
-  :on-preview="handlePictureCardPreview"
-  :on-remove="handleRemove">
-  <i class="el-icon-plus" ></i>
-</el-upload>
+  <el-form-item label="头像：" label-width="100px"> 
+<el-upload
+  class="avatar-uploader"
+  action="api/api/file/up"
+  :show-file-list="false"
+  :on-success="handleAvatarSuccess"
+  :before-upload="beforeAvatarUpload">
+  <img v-if="form.avatar" :src="form.avatar" class="avatarConsultancyDetails">
+  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+</el-upload> 
   </el-form-item>
   <el-form-item label="用户角色" label-width="100px">
     <el-select v-model="form.role" placeholder="请选择">
       <el-option label="时尚达人" value="shanghai"></el-option>
       <el-option label="高级时尚顾问" value="beijing"></el-option>
-      <el-option label="初级时尚顾问" value="beijing"></el-option>
+      <el-option label="初级时尚顾问" value="COUNSELOR"></el-option>
     </el-select>
   </el-form-item>
    <el-form-item label="昵称：" label-width="100px"> 
     <el-input v-model="form.nickName"></el-input> 
   </el-form-item>  
    <el-form-item label="微信二维码：" label-width="100px">
-       <el-upload
-  action="https://jsonplaceholder.typicode.com/posts/"
-  list-type="picture-card"
-  :on-preview="handlePictureCardPreview"
-  :on-remove="handleRemove">
-  <i class="el-icon-plus"></i>
-</el-upload>
+    <img v-if="qrcodeUrl" :src="qrcodeUrl" class="avatarConsultancyDetails">
   </el-form-item>
    <el-form-item label="关注二维码：" label-width="100px">
-   
-<el-upload
-  action="https://jsonplaceholder.typicode.com/posts/"
-  list-type="picture-card"
-  :on-preview="handlePictureCardPreview"
-  :on-remove="handleRemove">
-  <i class="el-icon-plus"></i>
-</el-upload>
+    <img v-if="qrcodeUrl" :src="qrcodeUrl" class="avatarConsultancyDetails">
   </el-form-item>
   <el-form-item label="姓名：" label-width="100px"> 
     <el-input v-model="form.name"></el-input> 
@@ -78,50 +67,65 @@
 
 <script>
 	import util from '../../common/js/util'
-	import { getUserDetails,addUserDetails,editUserDetails } from '../../api/api'; 
+	import { getUserDetails,addUserDetails,editUserDetails ,getQrcode } from '../../api/api'; 
   export default {
     data() {
       return {
            activeName: 'ConsultancyDetails',
            dialogImageUrl: '',
            pageType:"",
-        dialogVisible: false,
-        form:{   
-              id: "",
-              createTime: "",
-              nickName: "",
-              redPacket: 0,
-              name: "",
-              cover: "",
-              mobile: "",
-              state: false,
-              role: "COUNSELOR",
-              openId: "",
-              avatar: "",
-              motto: "",
-              address: "",
-              followNum: 0,
-              balance: 0
-          }
+          dialogVisible: false,
+          Loading: false,
+          qrcodeUrl: "",
+          form:{   
+                id: "",
+                createTime: "",
+                nickName: "",
+                redPacket: 0,
+                name: "",
+                cover: "",
+                mobile: "",
+                state: false,
+                role: "COUNSELOR",
+                openId: "",
+                avatar: "",
+                motto: "",
+                address: "",
+                followNum: 0,
+                balance: 0
+            }
       }
     },
     methods: {
+      handleAvatarSuccess(res, file) { 
+        this.form.avatar = res.file ;
+      },
+      beforeAvatarUpload(file) { 
+      },
+      showMessage(message,success){
+      this.$message({
+							message: message,
+							type: success
+						});
+      },
       onSubmit() { 
-       console.log(this.pageType); 
+        var that=this; 
     let para = {
            data:Object.assign({}, this.form)
         } 
        if(this.pageType=="edit"){
-          para.param= "59cbb548336a522ad06efe7e"; 
+          para.param=sessionStorage.getItem('token');// "59cbb548336a522ad06efe7e"; 
           	editUserDetails(para).then((res) => { 
-  // this.form  =res.data;
-  // this.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
+              that.Loading = false;
+              that.showMessage("保存成功","success")
+              that.goBack() ;
 				});
 
        }else{
-	addUserDetails(para).then((res) => { 
-  // this.form  =res.data;
-  // this.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
+	          addUserDetails(para).then((res) => { 
+              that.Loading = false;
+              that.showMessage("添加成功","success") ;
+              that.goBack() ;	
 				});
 
        }
@@ -133,6 +137,7 @@
         console.log(tab, event);
       },
       handlePictureCardPreview(file) {
+        console.log(file)
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
       },
@@ -140,26 +145,57 @@
 				this.$router.go(-1);
 			},
     } ,
-    created: function() { 
+    created: function() {   
      this.pageType=this.$router.currentRoute.query.pageType;
+      var that=this;
         	let para = {
-           param:"59cbb548336a522ad06efe7e"
+           param:sessionStorage.getItem('token')//"59cbb548336a522ad06efe7e"
         } 
       if(this.pageType=="edit"){
          
-				// this.listLoading = true;
+				 that.Loading = true; 
 				//NProgress.start();
 				getUserDetails(para).then((res) => { 
   this.form  =res.data;
-  this.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
-				});
+  this.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');
+       that.Loading = false;
+        this.qrcodeUrl  =res.data.qrcode;  
+        });
+        
+       
       }
 		}
   }
 </script>
 <style> 
+  .avatarConsultancyDetails {
+    width: 178px;
+    height: 178px; 
+  }
+</style>
+
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  } 
+  .avatar-uploader .el-upload:hover {
+    border-color: #20a0ff;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
   .avatar {
-    width: 80px;
-    height: 80px; 
+    width: 178px;
+    height: 178px;
+    display: block;
   }
 </style>

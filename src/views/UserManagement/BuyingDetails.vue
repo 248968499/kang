@@ -1,8 +1,8 @@
 
   <template>
 	<section>
-        <el-tabs v-model="activeName" @tab-click="handleClick">
-    <el-tab-pane label="买手详情" name="BuyingDetails">
+        <el-tabs v-model="activeName"  @tab-click="handleClick">
+    <el-tab-pane label="买手详情" v-loading="Loading" name="BuyingDetails">
         <el-form ref="form" :model="form" label-width="80px">
             <el-row>
                 <el-col :span="1"> 
@@ -11,6 +11,7 @@
                 </el-col>
   <el-col :span="4">
        <el-form-item> 
+         
     <img width="180" height="180" src="https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png" />
   </el-form-item>  </el-col>
   <el-col :span="6">
@@ -82,6 +83,7 @@
     data() {
       return {
            activeName: 'BuyingDetails', 
+           Loading: false,
          form:{   
               id: "",
               createTime: "",
@@ -104,25 +106,34 @@
     methods: {
       goBack() {
 				this.$router.go(-1);
-			},
+      }, 
+      showMessage(message,success){
+      this.$message({
+							message: message,
+							type: success
+						});
+      },
       onSubmit() { 
-       console.log(this.pageType); 
-    let para = {
-           data:Object.assign({}, this.form)
-        } 
+        var that=this; 
+        that.Loading=true;
+        let para = {
+              data:Object.assign({}, this.form)
+            } 
        if(this.pageType=="edit"){
-          para.param= "59cbb548336a522ad06efe7e"; 
-          	editUserDetails(para).then((res) => { 
-  // this.form  =res.data;
-  // this.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
-				});
+          para.param=sessionStorage.getItem('token');// "59cbb548336a522ad06efe7e"; 
+          	editUserDetails(para).then((res) => {  
+              
+        that.Loading=false;
+              that.showMessage("保存成功","success")
+              that.goBack()
+            	});
 
        }else{
 	addUserDetails(para).then((res) => { 
-  // this.form  =res.data;
-  // this.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
+              that.Loading=false;
+              that.showMessage("添加成功","success") ;
+              that.goBack() 
 				});
-
        }
       }, 
       handleClick(tab, event) {
@@ -131,16 +142,17 @@
     },
     created: function() {  
      this.pageType=this.$router.currentRoute.query.pageType;
-        	let para = {
-           param:"59cbb548336a522ad06efe7e"
+     var that=this;
+    let para = {
+           param:sessionStorage.getItem('token')//"59cbb548336a522ad06efe7e"
         } 
-      if(this.pageType=="edit"){ 
-				// this.listLoading = true;
+      if(this.pageType=="edit"){  
+				 that.Loading = true;
 				//NProgress.start();
-				getUserDetails(para).then((res) => { 
-      
-  this.form  =res.data;
-  this.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
+				getUserDetails(para).then((res) => {
+          this.form  =res.data;
+          this.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');
+          that.Loading = false;
 				});
       }
 		}
