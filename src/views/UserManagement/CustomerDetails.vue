@@ -59,12 +59,13 @@
                      </el-form-item> 
                 </el-col>
                 <el-col :span="20"> <br><br><br>
-                <el-tag :v-for="10">标签一</el-tag>
-<el-tag type="gray">标签二</el-tag>
+  <span v-for="(tip,index) in Tips">    <el-tag >{{tip.content}}</el-tag>&nbsp;&nbsp; </span>
+                <!-- <el-tag :v-for="tip in Tips">{{tip.content}}</el-tag> -->
+<!-- <el-tag type="gray">标签二</el-tag>
 <el-tag type="primary">标签三</el-tag>
 <el-tag type="success">标签四</el-tag>
 <el-tag type="warning">标签五</el-tag>
-<el-tag type="danger">标签六</el-tag>
+<el-tag type="danger">标签六</el-tag> -->
                 </el-col>
                 <el-col :span="1"> 
                      <el-form-item> 
@@ -111,12 +112,13 @@
 <script> 
 
 	import util from '../../common/js/util'
-	import { getUserDetails,addUserDetails,editUserDetails,getOrderList } from '../../api/api'; 
+	import { getUserDetails,addUserDetails,editUserDetails,getOrderList,getTips } from '../../api/api'; 
   export default {
     data() {
       return {
            activeName: 'CustomerDetails', 
            Loading:false, 
+           Tips:[],
          form:{   
               id: "",
               createTime: "",
@@ -222,7 +224,6 @@
       var that=this;
      that.pageType=that.$router.currentRoute.query.pageType;
   // var token=that.$router.currentRoute.query.token;
-debugger
         	let para = {
            param:sessionStorage.getItem('token')//"59cbb548336a522ad06efe7e"
         } 
@@ -237,6 +238,17 @@ debugger
               that.form  =res.data;
               that.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
             that.Loading = false;
+
+            getTips(para).then((res) => { 
+          
+          if(res.statusText=="OK"){
+            debugger
+            that.Tips=res.data;
+            console.log(that.Tips)
+               that.Loading = false; 
+          }else{  
+          }
+       });
           }else{ 
             that.showMessage("加载失败","warning") ;
           }

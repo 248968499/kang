@@ -25,6 +25,8 @@ export const addTips  = params => { return axios.get(`api/api/user/add/tips/`+ (
 
 //user/delete/tips/{token}/{tipId}
 export const delTips  = params => { return axios.get(`api/api/user/delete/tips/`+ (params.param||""),{params: params.data  }); };//, 
+// http://121.43.35.110:9000/api/user/tips/59cbb548336a522ad06efe7e
+export const getTips  = params => { return axios.get(`api/api/user/tips/`+ (params.param||""),{params: params.data  }); };//, 
 
 // export const getUserListPage = params => { return axios.get(`api/api/counselors/`+ params.url,{params: params.data  }); };//, 
 
