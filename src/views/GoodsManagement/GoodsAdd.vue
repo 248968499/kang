@@ -68,25 +68,36 @@
        <el-form-item label="商品首图：" label-width="100px">
             <el-upload 
         action="api/api/file/up"
-        list-type="picture-card"
+         class="avatar-uploader"
+        :show-file-list="true"
+        :on-success="handleAvatarSuccess"
         :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove">
-         <img width="180" height="180" hidden="form.description.img==''" src="https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png" />
-        <i class="el-icon-plus" ></i>
+        <img v-if="form.img" :src="form.img" class="avatarConsultancyDetails">
+        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
   </el-form-item>
-       <el-form-item label="文字说明：" label-width="100px">
-          <el-input
+    <el-form-item :label="'详情描述'+(index+1)+':'" label-width="100px" v-for="(domain, index) in form.description">
+           <label>图片：</label> <el-upload 
+        action="api/api/file/up"
+         class="avatar-uploader"
+        :show-file-list="false"
+        :on-success="handleAvatarSuccess1"
+        :on-preview="handlePictureCardPreview"
+        :on-remove="handleRemove"
+        :before-upload="beforeAvatarUpload(index)">
+        <img v-if="domain.img" :src="domain.img" class="avatarConsultancyDetails">
+        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+      </el-upload>
+         <label>内容：</label>  <el-input
   type="textarea"
   :rows="2"
   placeholder="请输入内容"
-  v-model="form.description.content">
+  v-model="domain.content">
 </el-input>
-  </el-form-item>
- 
+    </el-form-item>
   <el-form-item>
-    <el-button @click="addimg()">添加照片</el-button>
-    <el-button type="primary" @click="addcontent">添加文字
+    <el-button @click="addimg()">添加详细描述</el-button>
     </el-button>
   </el-form-item></el-col></el-row> 
 </el-form>
@@ -115,6 +126,7 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
         cnum4:false,
         cnum5:false,
         users:[],
+        imgindex:0,
         activeName: 'first',
         Loading: false,
         form:{
@@ -126,10 +138,7 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
           Brands:'',
           price:'',
           stockNum:0,
-          description:[{
-            content:'',
-            img:''
-          }]
+          description:[]
          
         },
          tableData: [{
@@ -155,6 +164,24 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
        goBack() {
 				this.$router.go(-1);
 			},
+      addimg(){
+        this.form.description.push({
+                   content:'',
+                    img:''
+                });
+      }
+      ,
+       handleAvatarSuccess(res, file) { 
+         
+        this.form.img = res.file ;
+      },
+       handleAvatarSuccess1(res, file) { 
+         var index = this.imgindex;
+         this.form.description[index].img = res.file ;
+      },
+       beforeAvatarUpload(index) { 
+         this.imgindex = index;
+      }, 
       //获取用户列表
 			getUsers() {  
 				let para = {
@@ -243,5 +270,30 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
   .avatar {
     width: 80px;
     height: 80px; 
+  }
+</style>
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  } 
+  .avatar-uploader .el-upload:hover {
+    border-color: #20a0ff;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
   }
 </style>

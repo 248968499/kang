@@ -98,7 +98,7 @@
     },
     methods: {
       handleAvatarSuccess(res, file) { 
-        this.form.avatar = res.file ;
+        this.form.img = res.file ;
       },
       beforeAvatarUpload(file) { 
       }, 
