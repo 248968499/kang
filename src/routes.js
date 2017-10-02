@@ -19,6 +19,7 @@ import ConsultancyManagement from './views/UserManagement/ConsultancyManagement.
 import ConsultancyDetails from './views/UserManagement/ConsultancyDetails.vue'
 import GoodsManagement from './views/GoodsManagement/GoodsManagement.vue'
 import GoodsAdd from './views/GoodsManagement/GoodsAdd.vue'
+import Test from './views/GoodsManagement/Test.vue'
 
 
 
@@ -84,7 +85,7 @@ let routes = [
         iconCls: 'fa fa-address-card',
         leaf: true,//只有一个节点
         children: [
-            { path: '/Form', component: Form, name: '概况' }
+            { path: '/', component: Page6, name: '概况' }
         ]
     },
     {

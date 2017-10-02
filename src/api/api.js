@@ -37,3 +37,18 @@ export const getTips  = params => { return axios.get(`api/api/user/tips/`+ (para
 // export const editUser = params => { return axios.get(`api/api/counselors/`+ params.url,{params: params.data  }); };//, 
 
 // export const addUser = params => { return instance.get(`${base}/user/add`, { params: params }); }; 
+
+export const getGoodsList  = params => { return axios.get(`api/api/goods`,{params: params.data  }); };//, 
+
+export const getGoodsDetails  = params => { return axios.get(`api/api/`+ params.token+'/'+params.goodsid,{params: params.data  }); };//, 
+
+export const addGoodsDetails  = params => { return axios.post(`api/api/add/gooods/`+ params.token,{params: params.data  }); };
+
+export const editGoodsDetails  = params => { return axios.post(`api/api/add/gooods/`+ params.token,{params: params.data  }); };
+
+export const delGoods  = params => { return axios.get(`api/api/gooods/remove/`+ params.goodsid,{params: params.data  }); };
+
+export const upGoods  = params => { return axios.get(`api/api/gooods/`+ params.goodsid+'/true',{params: params.data  }); };
+
+export const downGoods  = params => { return axios.get(`api/api/gooods/`+ params.goodsid+'/false',{params: params.data  }); };
+
