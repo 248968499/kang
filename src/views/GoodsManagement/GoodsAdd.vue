@@ -91,7 +91,7 @@
           <el-button @click.native.prevent="goBack" v-show="preview">返回</el-button>
           <el-button @click.native.prevent="handlePreStep" v-show="preStep">上一步</el-button>
           <el-button @click.native.prevent="handleNextStep" v-show="nextStep" type="primary">下一步</el-button>
-          <el-button @click.native.prevent="onSubmit" v-show="publish" type="primary">发布新产品</el-button>
+          <el-button @click.native.prevent="onSubmit" v-show="publish" type="primary">发布</el-button>
           <el-button @click="addDomain()" v-show="publish">新增详细描述</el-button>
         </div>
     </div>
