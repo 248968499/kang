@@ -122,7 +122,7 @@
        if(this.pageType=="edit"){
           para.param=sessionStorage.getItem('token');// "59cbb548336a522ad06efe7e"; 
           	editUserDetails(para).then((res) => {  
-              if(res.statusText=="OK"){  
+              if(res.status==200){ 
                 that.Loading=false; 
                  this.$message({
                     message: "保存成功",
@@ -139,7 +139,7 @@
 
        }else{
 	addUserDetails(para).then((res) => { 
-     if(res.statusText=="OK"){  
+     if(res.status==200){ 
               that.Loading=false;
               that.showMessage("添加成功","success") ;
               that.goBack() }else{  
@@ -158,15 +158,15 @@
     created: function() {  
      this.pageType=this.$router.currentRoute.query.pageType;
      var that=this;
-    let para = {
-           param:sessionStorage.getItem('token')//"59cbb548336a522ad06efe7e"
+      var token=that.$router.currentRoute.query.token;
+        	let para = {
+           param:token//sessionStorage.getItem('token')//"59cbb548336a522ad06efe7e"
         } 
       if(this.pageType=="edit"){  
 				 that.Loading = true;
 				//NProgress.start();
 				getUserDetails(para).then((res) => {
-           if(res.statusText=="OK"){   
-             
+           if(res.status==200){ 
                 that.showMessage("加载成功","warning") ; 
           this.form  =res.data;
           this.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');

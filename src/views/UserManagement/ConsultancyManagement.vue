@@ -39,7 +39,7 @@
 			</el-table-column> 
 			<el-table-column prop="name" label="用户名" width="120" sortable>
 			</el-table-column>
-			<el-table-column prop="nickName" label="用户名" width="120" sortable>
+			<el-table-column prop="nickName" label="昵称" width="120" sortable>
 			</el-table-column> 
 			<el-table-column prop="mobile" label="手机号" width="180" sortable>
 			</el-table-column>
@@ -68,7 +68,7 @@
 	import util from '../../common/js/util' 
 	
 	//import NProgress from 'nprogress'
-	import { getUserList } from '../../api/api'; 
+	import { getUserList,login } from '../../api/api'; 
 
 	export default {
 		data() {
@@ -148,7 +148,7 @@
 				//NProgress.start();
 				getUserList(para).then((res) => {
 					
-					if(res.statusText=="OK"){ 
+					if(res.status==200){ 
 						this.$message({ 
 							message: '加载成功',
 							type: 'success'
@@ -192,19 +192,15 @@
 			editUser: function (index, row) {
 		this.listLoading = true;                
 			var  params={ data : {
-						openId:row.openId,
-						nickName:row.nickName,
-						unionid:row.unionid
-					}}
-					login(params).then(res => {
-						  if(res.statusText=="OK"){
-						this.listLoading = true;
-					var	token=data.data.token; 
-					this.$router.push({ path: '/ConsultancyDetails', query: {pageType:"edit",token:token}}); 
-						  }else{
-							  
-						  }
-					});  
+                openId:row.id,
+                nickName:row.nickName,
+                unionid:row.id
+            }}
+            login(params).then(data => {
+				this.listLoading = true;
+			var	token=data.data.token; 
+			 this.$router.push({ path: '/ConsultancyDetails', query: {pageType:"edit",token:token}}); 
+			 }); 
 			},
 			//显示新增界面
 			handleAdd: function () {

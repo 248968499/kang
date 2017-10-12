@@ -20,16 +20,37 @@
 				</el-form-item>
 			</el-form>
 		</el-col>
-
-		<!--列表-->
+<!--列表-->
 		<el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
 			<el-table-column type="selection" width="55">
 			</el-table-column> 
 			<el-table-column prop="name" label="用户名" width="120" sortable>
 			</el-table-column>
-			<el-table-column prop="sex" label="昵称" width="100" :formatter="formatSex" sortable>
+			<el-table-column prop="nickName" label="昵称" width="120" sortable>
+			</el-table-column> 
+			<el-table-column prop="mobile" label="手机号" width="180" sortable>
 			</el-table-column>
-			<el-table-column prop="age" label="手机号" width="100" sortable>
+			<el-table-column prop="followNum" label="产品数量" width="120" sortable>
+			</el-table-column>
+			<el-table-column prop="createTime" label="注册时间" min-width="180" sortable>
+			</el-table-column>
+			<el-table-column label="操作" width="150">
+				<template scope="scope">
+					<el-button size="small" @click="editUser(scope.$index, scope.row)">编辑</el-button>
+					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+				</template>
+			</el-table-column>
+		</el-table>
+
+		<!-- 列表
+		<el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+			<el-table-column type="selection" width="55">
+			</el-table-column> 
+			<el-table-column prop="name" label="用户名" width="120" sortable>
+			</el-table-column>
+			<el-table-column prop="nickName" label="昵称" width="100" :formatter="formatSex" sortable>
+			</el-table-column>
+			<el-table-column prop="mobile" label="手机号" width="100" sortable>
 			</el-table-column>
 			<el-table-column prop="birth" label="产品数量" width="120" sortable>
 			</el-table-column>
@@ -41,7 +62,7 @@
 					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
-		</el-table>
+		</el-table> -->
 
 		<!--工具条-->
 		<el-col :span="24" class="toolbar">
@@ -55,7 +76,7 @@
 <script>
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
-	import { getUserList } from '../../api/api'; 
+	import { getUserList,login } from '../../api/api'; 
 
 	export default {
 		data() {
@@ -122,7 +143,7 @@
 				this.listLoading = true;
 				//NProgress.start();
 				getUserList(para).then((res) => {
-					if(res.statusText=="OK"){ 
+					if(res.status==200){ 
 						this.$message({ 
 							message: '加载成功',
 							type: 'success'
@@ -176,18 +197,17 @@
 			},
 			//显示编辑界面
 			editUser: function (index, row) {
-
 				this.listLoading = true;                
-			var  params={ data : {
-						openId:row.openId,
-						nickName:row.nickName,
-						unionid:row.unionid
-					}}
-					login(params).then(data => {
-						this.listLoading = true;
-					var	token=data.data.token; 
-					 this.$router.push({ path: '/BuyingDetails', query: {pageType:"edit",token:token}}); 
-					});   
+		var  params={ data : {
+                openId:row.id,
+                nickName:row.nickName,
+                unionid:row.id
+            }}
+            login(params).then(data => {
+			this.listLoading = true;
+			var	token=data.data.token; 
+			 this.$router.push({ path: '/BuyingDetails', query: {pageType:"edit",token:token}}); 
+			 });   
 				// this.editFormVisible = true;
 				// this.editForm = Object.assign({}, row);
 			},

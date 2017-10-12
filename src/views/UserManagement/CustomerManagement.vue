@@ -177,8 +177,7 @@
 				this.listLoading = true;
 				//NProgress.start();
 				getUserList(para).then((res) => { 
-
-					if(res.statusText=="OK"){ 
+					if(res.status==200){ 
 						this.$message({ 
 							message: '加载成功',
 							type: 'success'
@@ -233,17 +232,17 @@
 			}, 
 			editUser: function (index, row) {
 				 this.listLoading = true;                
-    //   var  params={ data : {
-    //             openId:row.openId,
-    //             nickName:row.nickName,
-    //             unionid:row.unionid
-    //         }}
-    //         login(params).then(data => {
-	// 			this.listLoading = true;
-	// 		var	token=data.data.token; 
-	// 		 this.$router.push({ path: '/CustomerDetails', query: {pageType:"edit",token:token}}); 
-	// 		 }); 
-			 this.$router.push({ path: '/CustomerDetails', query: {pageType:"edit"}}); 
+      var  params={ data : {
+                openId:row.id,
+                nickName:row.nickName,
+                unionid:row.id
+            }}
+            login(params).then(data => {
+				this.listLoading = true;
+			var	token=data.data.token; 
+			 this.$router.push({ path: '/CustomerDetails', query: {pageType:"edit",token:token}}); 
+			 }); 
+			 //this.$router.push({ path: '/CustomerDetails', query: {pageType:"edit"}}); 
 				// this.editFormVisible = true;
 				// this.editForm = Object.assign({}, row);
 			},

@@ -189,8 +189,7 @@
        if(this.pageType=="edit"){
           para.param= sessionStorage.getItem('token');//"59cbb548336a522ad06efe7e"; 
           	editUserDetails(para).then((res) => {  
-              
-          if(res.statusText=="OK"){
+              if(res.status==200){ 
 						 	that.Loading = false;
               that.showMessage("保存成功","success")
               that.goBack() ; 
@@ -223,17 +222,16 @@
     created: function() { 
       var that=this;
      that.pageType=that.$router.currentRoute.query.pageType;
-  // var token=that.$router.currentRoute.query.token;
+   var token=that.$router.currentRoute.query.token;
         	let para = {
-           param:sessionStorage.getItem('token')//"59cbb548336a522ad06efe7e"
+           param:token//sessionStorage.getItem('token')//"59cbb548336a522ad06efe7e"
         } 
       if(that.pageType=="edit"){
          
 				 that.Loading = true;
 				//NProgress.start();
 				getUserDetails(para).then((res) => { 
-          
-          if(res.statusText=="OK"){
+          if(res.status==200){ 
              that.showMessage("加载成功","success") ;
               that.form  =res.data;
               that.form.createTime=(!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
@@ -241,8 +239,7 @@
 
             getTips(para).then((res) => { 
           
-          if(res.statusText=="OK"){
-            debugger
+          if(res.status==200){ 
             that.Tips=res.data;
             console.log(that.Tips)
                that.Loading = false; 

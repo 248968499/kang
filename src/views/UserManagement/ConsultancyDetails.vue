@@ -110,7 +110,7 @@
        if(this.pageType=="edit"){
           para.param=sessionStorage.getItem('token');// "59cbb548336a522ad06efe7e"; 
           	editUserDetails(para).then((res) => {  
-              if(res.statusText=="OK"){ 
+              if(res.status==200){ 
                 that.Loading = false; 
                 this.$message({
                   message: "保存成功",
@@ -161,8 +161,9 @@
     created: function() {   
      this.pageType=this.$router.currentRoute.query.pageType;
       var that=this;
+         var token=that.$router.currentRoute.query.token;
         	let para = {
-           param:sessionStorage.getItem('token')//"59cbb548336a522ad06efe7e"
+           param:token//sessionStorage.getItem('token')//"59cbb548336a522ad06efe7e"
         } 
       if(this.pageType=="edit"){
          
@@ -170,7 +171,7 @@
 				//NProgress.start();
 				getUserDetails(para).then((res) => { 
           var that=this;
-           if(res.statusText=="OK"){ 
+           if(res.status==200){ 
               this.$message({
 							message: "加载成功",
 							type: "success"

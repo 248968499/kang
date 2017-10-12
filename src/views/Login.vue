@@ -57,18 +57,31 @@
                         nickName:"小贝",
                         unionid:"o10ngjojdB9nEYqAyrUr_Nv0cyP4"
                     }}
-            login(params).then(data => { 
-             if(data.statusText&&data.statusText=="OK"){
+                     login(params).then(function(data){ 
+             if(data.status&&data.status==200){
               _this.logining = false;  
               _this.showMessage("登陆成功","success");
                  sessionStorage.setItem('token',data.data.token);
-                this.$router.push({ path: '/CustomerManagement' }); 
+                _this.$router.push({ path: '/CustomerManagement' }); 
                 }else
                 { 
               _this.logining = false;  
               _this.showMessage("登陆失败","warning");
                 }
             }); 
+            // login(params).then(data => { 
+              
+            //  if(data.statusText&&data.statusText=="OK"){
+            //   _this.logining = false;  
+            //   _this.showMessage("登陆成功","success");
+            //      sessionStorage.setItem('token',data.data.token);
+            //     this.$router.push({ path: '/CustomerManagement' }); 
+            //     }else
+            //     { debugger
+            //   _this.logining = false;  
+            //   _this.showMessage("登陆失败","warning");
+            //     }
+            // }); 
       }
     }
   }
