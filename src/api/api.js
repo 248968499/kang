@@ -47,9 +47,10 @@ export const getGoodsList  = params => { return axios.get(`${base}/api/goods`,{p
 
 export const getGoodsDetails  = params => { return axios.get(`${base}/api/`+ params.token+'/'+params.goodsid,{params: params.data  }); };//,
 
-export const addGoodsDetails  = params => { return axios.post(`${base}/api/add/gooods/`+ params.token,{params: params.data  }); };
+export const addGoodsDetails  =  params => { return axios.post(`${base}/api/add/goods/`+ params.token+ (params.param||""),params.data  ); };//,
+//params => { return axios.post(`api/api/add/goods/`+ params.token),params.data; };
 
-export const editGoodsDetails  = params => { return axios.post(`${base}/api/add/gooods/`+ params.token,{params: params.data  }); };
+export const editGoodsDetails  =  params => { return axios.post(`${base}/api/add/goods/`+ params.token+ (params.param||""),params.data  ); };//,
 
 export const delGoods  = params => { return axios.get(`${base}/api/gooods/remove/`+ params.goodsid,{params: params.data  }); };
 
