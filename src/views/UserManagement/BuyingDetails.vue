@@ -10,7 +10,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="4">
-             <el-form-item label="头像：" label-width="100px">
+              <el-form-item label="头像：" label-width="100px">
                 <el-upload class="avatar-uploader" action="api/api/file/up" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
                   <img v-if="form.avatar" :src="form.avatar" class="avatarConsultancyDetails">
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -40,8 +40,8 @@
               </el-form-item>
               <br>
               <el-form-item label="注册日期">
-                <!-- <el-input v-model="form.createTime" placeholder=""></el-input> -->
-                <el-date-picker disabled v-model="form.createTime" type="date" placeholder="选择日期" :picker-options="pickerOptions0">
+                <!-- <el-input v-model="form.createTime" placeholder=""></el-input>:picker-options="pickerOptions0" -->
+                <el-date-picker disabled v-model="form.createTime" type="date" placeholder="选择日期" >
                 </el-date-picker>
               </el-form-item>
             </el-col>
@@ -73,9 +73,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-
         </el-form>
-
       </el-tab-pane>
     </el-tabs>
   </section>
@@ -86,17 +84,17 @@ import { getUserDetails, addUserDetails, editUserDetails } from '../../api/api';
 export default {
   data() {
     return {
-      pickerOptions0: {
-        disabledDate(time) {
-          return   //Date.now()  
-        }
-      },
+      // pickerOptions0: {
+      //   disabledDate(time) {
+      //     return   //Date.now()  
+      //   }
+      // },
       date: new Date(),
       activeName: 'BuyingDetails',
       Loading: false,
       form: {
         id: "",
-        createTime:new Date(),
+        createTime: new Date(),
         nickName: "",
         redPacket: 0,
         name: "",
@@ -116,6 +114,8 @@ export default {
   methods: {
     handleAvatarSuccess(res, file) {
       this.form.avatar = res.file;
+    },
+    beforeAvatarUpload(file) {
     },
     goBack() {
       this.$router.go(-1);

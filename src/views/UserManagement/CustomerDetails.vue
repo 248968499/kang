@@ -32,7 +32,9 @@
             </el-col>
             <el-col :span="4">
               <el-form-item label="生日：">
-                <el-input v-model="form.birthday" placeholder=""></el-input>
+                <el-date-picker v-model="form.birthday" type="date" placeholder="选择日期">
+                </el-date-picker>
+                <!-- <el-input v-model="form.birthday" placeholder=""></el-input> -->
               </el-form-item>
               <br>
               <el-form-item label="所在地">
@@ -40,7 +42,9 @@
               </el-form-item>
               <br>
               <el-form-item label="注册日期">
-                <el-input disabled="true" v-model="form.createTime" placeholder=""></el-input>
+                <el-date-picker disabled v-model="form.createTime" type="date" placeholder="选择日期">
+                </el-date-picker>
+                <!-- <el-input disabled="true" v-model="form.createTime" placeholder=""></el-input> -->
               </el-form-item>
             </el-col>
             <el-col :span="4">
@@ -56,7 +60,7 @@
             </el-col>
 
           </el-row><br>
-          <el-row>
+          <el-row v-if="pageType=='edit'">
             <el-col :span="3">
               <el-form-item> 会员标签：
               </el-form-item>
@@ -66,10 +70,12 @@
                 <el-tag>{{tip.content}}</el-tag>&nbsp;&nbsp; </span>
               <!-- <el-tag :v-for="tip in Tips">{{tip.content}}</el-tag> -->
               <!-- <el-tag type="gray">标签二</el-tag>
-  <el-tag type="primary">标签三</el-tag>
-  <el-tag type="success">标签四</el-tag>
-  <el-tag type="warning">标签五</el-tag>
-  <el-tag type="danger">标签六</el-tag> -->
+            <el-tag type="primary">标签三</el-tag>
+            <el-tag type="success">标签四</el-tag>
+            <el-tag type="warning">标签五</el-tag>
+            <el-tag type="danger">标签六</el-tag> -->
+              <el-tag type="primary" @click.native="handleTipsVisible" :loading="Loading">添加</el-tag>
+              <!-- <el-button type="" @click="handleTipsVisible" :loading="Loading">添加</el-button> -->
             </el-col>
             <el-col :span="1">
               <el-form-item>
@@ -104,18 +110,36 @@
         </el-table>
       </el-tab-pane>
     </el-tabs>
+    <!--新增界面-->
+    <el-dialog title="新增标签" v-model="addTipsVisible" :close-on-click-modal="false">
+      <el-form  :model="Tip"  label-width="80px" ref="addTips">
+        <el-form-item label="标签" prop="name">
+          <el-input v-model="Tip.content" auto-complete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click.native="addTipsVisible= false">取消</el-button>
+        <el-button type="primary" @click.native="addTip" :loading="Loading">添加</el-button>
+      </div>
+    </el-dialog>
   </section>
 </template>
 <script> 
 
 import util from '../../common/js/util'
-import { getUserDetails, addUserDetails, editUserDetails, getOrderList, getTips,getQrcode } from '../../api/api';
+import { getUserDetails, addUserDetails, editUserDetails,addTips , getOrderList, addTip, getTips, getQrcode } from '../../api/api';
 export default {
   data() {
     return {
+      pageType:"",
+      tipCount: '',
       activeName: 'CustomerDetails',
+      addTipsVisible: false,
       Loading: false,
       Tips: [],
+      Tip: {
+        content: ""
+      },
       form: {
         id: "",
         createTime: "",
@@ -132,24 +156,10 @@ export default {
         address: "",
         followNum: 0,
         balance: 0,
-        birthday:""
+        birthday: ""
         //  tips:["时尚","aaa","bbb"]
       },
-      OrderList: [],
-      // {
-      //   goods: {},
-      //   money: 123.00,
-      //   goodsNum: 2,//商品数量
-      //   receiver: {},
-      //   pay: true,//是否支付
-      //   state: "UNSEND",//未付款 NONE, 未发货 UNSEND,未收获 UNRECEIVED,已完成 FINISH
-      //   detial: "",
-      //   user: {},
-      //   message: "留言",
-      //   distributionType: "配送方式",
-      //   expressCompany: "快递公司",
-      //   expressNo: "23141234123cdssfd"//单号
-      // }
+      OrderList: [], 
       tableData: [{
         date: '2016-05-02',
         name: '王小虎',
@@ -170,8 +180,36 @@ export default {
     }
   },
   methods: {
-     handleAvatarSuccess(res, file) {
+    handleTipsVisible: function() {
+      this.addTipsVisible = true;
+      this.addTips = Object.assign({}, this.Tip);
+    },
+    addTipSubmit() {
+
+    },//显示编辑界面
+    addTip() {
+      var that = this;
+      that.Loading = true;
+      let para = {
+        data: Object.assign({}, this.Tip)
+      }
+      if (this.pageType == "edit") {
+        para.param = this.token;//sessionStorage.getItem('token');//"59cbb548336a522ad06efe7e"; 
+        addTips(para).then((res) => {
+          if (res.status == 200) {
+            that.Loading = false;
+             this.addTipsVisible = false;
+            that.showMessage("保存成功", "success") 
+          } else {
+            that.showMessage("添加失败", "warning");
+          }
+        }); 
+      }
+    },
+    handleAvatarSuccess(res, file) {
       this.form.avatar = res.file;
+    },
+    beforeAvatarUpload(file) {
     },
     goBack() {
       this.$router.go(-1);
@@ -185,11 +223,12 @@ export default {
     onSubmit() {
       var that = this;
       that.Loading = true;
+      this.form.birthday = new Date(this.form.birthday).getTime()
       let para = {
         data: Object.assign({}, this.form)
       }
       if (this.pageType == "edit") {
-        para.param = sessionStorage.getItem('token');//"59cbb548336a522ad06efe7e"; 
+        para.param = this.token;//sessionStorage.getItem('token');//"59cbb548336a522ad06efe7e"; 
         editUserDetails(para).then((res) => {
           if (res.status == 200) {
             that.Loading = false;
@@ -202,7 +241,7 @@ export default {
 
       } else {
         addUserDetails(para).then((res) => {
-          if (res.statusText == "OK") {
+          if (res.status == 200) {
             that.Loading = false;
             that.showMessage("添加成功", "success");
             that.goBack();
@@ -214,10 +253,10 @@ export default {
       }
     },
     handleClick(tab, event) {
-      var that=this;
+      var that = this;
       getOrderList(para).then((res) => {
         that.OrderList = res.data;
-       // that.form.createTime = (!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
+        // that.form.createTime = (!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');;
       });
       console.log(tab, event);
     },
@@ -225,9 +264,9 @@ export default {
   created: function() {
     var that = this;
     that.pageType = that.$router.currentRoute.query.pageType;
-    var token = that.$router.currentRoute.query.token;
+    this.token = that.$router.currentRoute.query.token;
     let para = {
-      param: token//sessionStorage.getItem('token')//"59cbb548336a522ad06efe7e"
+      param: this.token//sessionStorage.getItem('token')//"59cbb548336a522ad06efe7e"
     }
     if (that.pageType == "edit") {
 

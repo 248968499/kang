@@ -365,7 +365,7 @@ export default {
 			this.listLoading = true;
 			getUserList(para).then((res) => {
 
-				if (res.statusText == "OK") {
+				 if (res.status == 200) {
 					this.$message({
 						message: '加载成功',
 						type: 'success'

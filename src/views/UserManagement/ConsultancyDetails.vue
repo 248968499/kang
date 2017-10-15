@@ -52,8 +52,9 @@
               <el-form-item label="所在地：" label-width="100px">
                 <el-input v-model="form.address"></el-input>
               </el-form-item>
-              <el-form-item label="注册时间" v-model="form.createTime" label-width="100px">
-                <el-input v-model="form.createTime"></el-input>
+              <el-form-item label="注册时间"label-width="100px">
+               <el-date-picker disabled v-model="form.createTime" type="date" placeholder="选择日期" :picker-options="pickerOptions0">
+                </el-date-picker>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="onSubmit">立即创建</el-button>
@@ -144,7 +145,7 @@ export default {
         });
       } else {
         addUserDetails(para).then((res) => {
-          if (res.statusText == "OK") {
+          if (res.status == 200) {
             that.Loading = false;
             this.$message({
               message: "添加成功",
