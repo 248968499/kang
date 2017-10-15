@@ -17,7 +17,7 @@
 							</el-breadcrumb-item>
 						</el-breadcrumb>  
 			</el-col>   
-			<el-col :span="5" class="userinfo">
+			<el-col :span="4" class="userinfo">
 				<el-dropdown trigger="hover">
 					<span class="el-dropdown-link userinfo-inner">{{sysUserName}}<img :src="this.sysUserAvatar" /> </span>
 					<el-dropdown-menu slot="dropdown">
@@ -155,8 +155,8 @@
 		bottom: 0px;
 		width: 100%;
 		.header {
-			height: 60px;
-			line-height: 60px;
+			height: 80px;
+			line-height: 80px;
 			background: $color-primary;
 			color:#fff;
 			.userinfo {
@@ -196,11 +196,10 @@
 				}
 			}
 			.logo-width{
-				width:150px;
-				height:50px;
+				width:200px;
 			}
 			.logo-collapse-width{
-				width:20px
+				width:40px
 			}
 			// .tools{
 			// 	padding: 0px 23px;
