@@ -403,13 +403,16 @@ export default {
             this.sels = sels;
         },
         toggleSelection(rows, index) {
-            // var length = data.length;
-            // var checklength = this.sels.length;
-            // if (length != checklength) {
-            // data.forEach(row => {
-            //     this.$refs.multipleTable.toggleRowSelection(row);
-            // });
-            debugger;
+            var length = rows.length;
+            var checklength = this.sels.length;
+            if (length != checklength) {
+                 if (index == 1)
+                    this.$refs.multipleTable1.clearSelection();
+                if (index == 2)
+                    this.$refs.multipleTable2.clearSelection();
+                if (index == 3)
+                    this.$refs.multipleTable3.clearSelection()
+            }
             if (rows) {
                 rows.forEach(row => {
                     if (index == 1)
@@ -427,9 +430,6 @@ export default {
                 if (index == 3)
                     this.$refs.multipleTable3.clearSelection()
             }
-            // } else {
-            //     this.$refs.multipleTable.clearSelection();
-            // }
         },
         //批量删除
         batchRemove: function() {
