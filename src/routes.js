@@ -20,6 +20,8 @@ import ConsultancyDetails from './views/UserManagement/ConsultancyDetails.vue'
 import GoodsManagement from './views/GoodsManagement/GoodsManagement.vue'
 import GoodsAdd from './views/GoodsManagement/GoodsAdd.vue'
 import Test from './views/GoodsManagement/Test.vue'
+import OrderManagement from './views/OrderManagement/OrderManagement.vue'
+import OrderDetalis from './views/OrderManagement/OrderDetalis.vue'
 
 
 
@@ -95,7 +97,17 @@ let routes = [
         iconCls: 'fa fa-address-card',
         leaf: true,//只有一个节点
         children: [
-            { path: '/', component: Page6, name: '订单管理' }
+            { path: '/OrderManagement', component: OrderManagement, name: '订单管理' }
+        ]
+    },
+    {
+        path: '/',
+        component: Home,
+        name: '',
+        iconCls: 'fa fa-address-card',
+        leaf: true,//只有一个节点
+        children: [
+            { path: '/OrderDetalis', component: OrderDetalis, name: '订单详情' }
         ]
     },
     {

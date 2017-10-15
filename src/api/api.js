@@ -12,7 +12,7 @@ export const login  = params => { return axios.post(`${base}/api/login/`+ (param
 export const getUserList  = params => { return axios.get(`${base}/api/find/user/by/role/`+ (params.param||""),{params: params.data  }); };//,
 //http://121.43.35.110:9000/api/user/profile/59cbb548336a522ad06efe7e
 export const getUserDetails  = params => { return axios.get(`${base}/api/user/profile/`+ (params.param||""),{params: params.data  }); };//,
-export const getOrderList  = params => { return axios.get(`${base}/api/find/user/order/list/`+ (params.param||""),{params: params.data  }); };//,
+// export const getOrderList  = params => { return axios.get(`${base}/api/find/user/order/list/`+ (params.param||""),{params: params.data  }); };//,
 //http://121.43.35.110:9000/api/user/profile/59cbb548336a522ad06efe7e
 export const addUserDetails  = params => { return axios.post(`${base}/api/insert/user/`+ (params.param||""),params.data  ); };//,
 export const editUserDetails  = params => { return axios.post(`${base}/api/user/profile/`+ (params.param||""),params.data ); };//,
@@ -28,6 +28,10 @@ export const addTips  = params => { return axios.get(`${base}/api/user/add/tips/
 export const delTips  = params => { return axios.get(`${base}/api/user/delete/tips/`+ (params.param||""),{params: params.data  }); };//,
 // http://121.43.35.110:9000/api/user/tips/59cbb548336a522ad06efe7e
 export const getTips  = params => { return axios.get(`${base}/api/user/tips/`+ (params.param||""),{params: params.data  }); };//,
+// http://121.43.35.110:9000/api/find/user/order/list/59cbb548336a522ad06efe7e
+export const getOrderList  = params => { return axios.get(`${base}/api/find/user/order/list/`+ (params.param||""),{params: params.data  }); };//,
+//http://121.43.35.110:9000/api/counselors/599108c4336a526a0dc1f9bb
+export const getCounselors  = params => { return axios.get(`${base}/api/counselors/`+ (params.param||""),{params: params.data  }); };//,
 
 // export const getUserListPage = params => { return axios.get(`${base}/api/counselors/`+ params.url,{params: params.data  }); };//,
 
