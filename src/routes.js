@@ -19,7 +19,7 @@ import ConsultancyManagement from './views/UserManagement/ConsultancyManagement.
 import ConsultancyDetails from './views/UserManagement/ConsultancyDetails.vue'
 import GoodsManagement from './views/GoodsManagement/GoodsManagement.vue'
 import GoodsAdd from './views/GoodsManagement/GoodsAdd.vue'
-import Test from './views/GoodsManagement/Test.vue'
+import RightsOrder from './views/RightsOrder/RightsOrder.vue'
 import OrderManagement from './views/OrderManagement/OrderManagement.vue'
 import OrderDetalis from './views/OrderManagement/OrderDetalis.vue'
 
@@ -87,7 +87,7 @@ let routes = [
         iconCls: 'fa fa-address-card',
         leaf: true,//只有一个节点
         children: [
-            { path: '/', component: Page6, name: '概况' }
+            { path: '/Table', component: Table, name: '概况' }
         ]
     },
     {
@@ -148,6 +148,16 @@ let routes = [
         leaf: true,//只有一个节点
         children: [
             { path: '/', component: Page6, name: '快速打单' }
+        ]
+    },
+    {
+        path: '/',
+        component: Home,
+        name: '维权订单',
+        iconCls: 'fa fa-address-card',
+        leaf: true,//只有一个节点
+        children: [
+            { path: '/RightsOrder', component: RightsOrder, name: '维权订单' }
         ]
     },
     {

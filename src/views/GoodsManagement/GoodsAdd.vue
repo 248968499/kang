@@ -2,11 +2,11 @@
   <template>
 	<section>
        <div class="activePublic ">
-      <el-steps :space="200" :active="step" class="step">
+      <el-steps :space="200" :active="step" class="step" v-loading="Loading">
         <el-step title="基础信息" description=""></el-step>
         <el-step title="详细信息" description=""></el-step>
       </el-steps>
-     <el-form ref="form" :model="form" label-width="80px">
+     <el-form ref="form" :model="form" label-width="80px" >
              <el-row> 
             <el-col :span="1">
    <el-form-item></el-form-item>
@@ -29,17 +29,17 @@
     </el-select>
   </el-form-item>
   <el-form-item label="品牌名称" label-width="100px" :hidden="preStep">
-    <el-select v-model="form.Brands" placeholder="请选择">
-      <el-option label="品牌1" value="1"></el-option>
-      <el-option label="品牌2" value="2"></el-option>
-      <el-option label="品牌3" value="3"></el-option>
+    <el-select v-model="form.brands" placeholder="请选择">
+      <el-option label="品牌1" value="品牌1"></el-option>
+      <el-option label="品牌2" value="品牌2"></el-option>
+      <el-option label="品牌3" value="品牌3"></el-option>
     </el-select>
   </el-form-item>
   <el-form-item label="商品类目" label-width="100px" :hidden="preStep">
     <el-select v-model="form.goodsType" placeholder="请选择">
-      <el-option label="类目1" value="1"></el-option>
-      <el-option label="类目2" value="2"></el-option>
-      <el-option label="类目3" value="3"></el-option>
+      <el-option label="类目1" value="类目1"></el-option>
+      <el-option label="类目2" value="类目2"></el-option>
+      <el-option label="类目3" value="类目3"></el-option>
     </el-select>
  </el-form-item>
    <el-form-item label="尺码库存" label-width="100px" :hidden="preStep">
@@ -123,15 +123,20 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
         imgindex:0,
         activeName: 'first',
         Loading: false,
+        attr:[],
         form:{
           goodsId:'',
           img:'',
           name: '',
           senderId:'',
           goodsType:'',
-          Brands:'',
+          brands:'',
           price:'',
           stockNum:0,
+          attr:[{
+                   size:'xs',
+                    num:'12'
+                }],
           description:[{
                    content:'',
                     img:''
@@ -205,6 +210,37 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
 			}, 
       onSubmit() {
         this.form.stockNum = this.num1+this.num2+this.num3+this.num4+this.num5;
+        this.form.attr =  [];
+        if(this.num1 > 0){
+              this.form.attr.push({
+                   size:'xs',
+                    num:this.num1
+                });
+        }
+         if(this.num2 > 0){
+             this.form.attr.push({
+                   size:'s',
+                    num:this.num2
+                });
+        }
+         if(this.num3 > 0){
+             this.form.attr.push({
+                   size:'M',
+                    num:this.num3
+                });
+        }
+         if(this.num4 > 0){
+             this.form.attr.push({
+                   size:'L',
+                    num:this.num4
+                });
+        }
+         if(this.num5 > 0){
+             this.form.attr.push({
+                   size:'均码',
+                    num:this.num5
+                });
+        }
         let para = {
               token: sessionStorage.getItem('token'),
               data:Object.assign({}, this.form)
@@ -212,6 +248,19 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
              this.Loading = true;
        if(this.pageType=="edit"){
           	editGoodsDetails(para).then((res) => { 
+               this.Loading = false; 
+            if(res.statusText=="OK"){ 
+                this.$message({
+                  message: "保存成功",
+                  type: "success"
+                }); 
+              this.goBack() ;
+              }else{  
+                 this.$message({
+                    message: "保存失败",
+                    type: "warning"
+                  }); 
+              }
 			    	});
            }else{
             addGoodsDetails(para).then((res) => { 
@@ -221,7 +270,7 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
                   message: "保存成功",
                   type: "success"
                 }); 
-              that.goBack() ;
+              this.goBack() ;
               }else{  
                  this.$message({
                     message: "保存失败",
@@ -243,37 +292,50 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
         let checkedCount = value.length;
         this.checkAll = checkedCount === this.cities.length;
         this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
-      },
+      }
+    },
     created: function() { 
-      getUsers() ;
       var that=this;
       that.pageType=that.$router.currentRoute.query.pageType;
-        
       if(that.pageType=="edit"){
         	let para = {
            token: sessionStorage.getItem('token'),
            goodsid:that.$router.currentRoute.query.goodsid
         } 
 				getGoodsDetails(para).then((res) => { 
-        that.form  =res.data;
+          this.form = res.data.goods
+         this.form.attr.forEach(item => {
+                             switch (item.size)
+                                    {
+                                    case 'xs':
+                                      this.cnum1 = true;
+                                      this.num1 = item.num;
+                                      break;
+                                    case 's':
+                                      this.cnum2 = true;
+                                      this.num2 = item.num;
+                                      break;
+                                    case 'M':
+                                      this.cnum3 = true;
+                                      this.num3 = item.num;
+                                      break;
+                                    case 'L':
+                                      this.cnum4 = true;
+                                      this.num4 = item.num;
+                                      break;
+                                    case '均码':
+                                      this.cnum5 = true;
+                                      this.num5 = item.num;
+                                      break;
+                                    default:
+                                    break;
+                                    }
+                            });
 				});
       }
-		}
-    },
+		},
 		mounted() {
 			this.getUsers();
-       var that=this;
-      that.pageType=that.$router.currentRoute.query.pageType;
-        
-      if(that.pageType=="edit"){
-        	let para = {
-           token: sessionStorage.getItem('token'),
-           goodsid:that.$router.currentRoute.query.goodsid
-        } 
-				getGoodsDetails(para).then((res) => { 
-        that.form  =res.data;
-				});
-      }
 		}
   }
 </script>

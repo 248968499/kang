@@ -7,7 +7,7 @@
                             <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
                                 <el-form :inline="true" :model="filters">
                                      <el-form-item>
-                                        <el-button type="primary" v-on:click="addUser" style="background-color:#ff4949">发布新产品</el-button>
+                                        <el-button type="primary" v-on:click="addgoods" style="background-color:#ff4949">发布新产品</el-button>
                                     </el-form-item>
                                     <el-form-item style="margin-left:70%;">
                                         <el-input v-model="filters.endDateTime" placeholder="搜索" ></el-input>
@@ -31,7 +31,7 @@
                                 <template scope="scope">{{ scope.row.name }}</template>
                             </el-table-column>
                             <el-table-column
-                                prop="Brands"
+                                prop="brands"
                                 label="品牌"
                                 width="120">
                             </el-table-column>
@@ -41,7 +41,9 @@
                             </el-table-column>
                             <el-table-column
                                 label="状态">
-                                已下架
+                               <template scope="scope">  
+                                    热卖中
+                                </template>  
                             </el-table-column>
                             <el-table-column
                                 prop="senderId"
@@ -53,7 +55,7 @@
                             </el-table-column>
                             <el-table-column label="操作" width="150">
                                 <template scope="scope">
-                                    <el-button size="small" @click="editUser(scope.$index, scope.row)">编辑</el-button>
+                                    <el-button size="small" @click="editgoods(scope.$index, scope.row)">编辑</el-button>
                                     <el-button type="danger" size="small" @click="down(scope.$index, scope.row)">下架</el-button>
                                 </template>
                             </el-table-column>
@@ -75,7 +77,7 @@
                             <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
                                 <el-form :inline="true" :model="filters">
                                     <el-form-item>
-                                        <el-button type="primary" v-on:click="addUser" style="background-color:#ff4949">发布新产品</el-button>
+                                        <el-button type="primary" v-on:click="addgoods" style="background-color:#ff4949">发布新产品</el-button>
                                     </el-form-item>
                                     <el-form-item style="margin-left:70%;">
                                         <el-input v-model="filters.endDateTime" placeholder="搜索" ></el-input>
@@ -99,7 +101,7 @@
                                 <template scope="scope">{{ scope.row.name }}</template>
                             </el-table-column>
                             <el-table-column
-                                prop="Brands"
+                                prop="brands"
                                 label="品牌"
                                 width="120">
                             </el-table-column>
@@ -109,7 +111,9 @@
                             </el-table-column>
                             <el-table-column
                                 label="状态">
-                                已下架
+                               <template scope="scope">  
+                                    已售罄
+                                </template>  
                             </el-table-column>
                             <el-table-column
                                 prop="senderId"
@@ -121,7 +125,7 @@
                             </el-table-column>
                             <el-table-column label="操作" width="150">
                                 <template scope="scope">
-                                    <el-button size="small" @click="editUser(scope.$index, scope.row)">详情</el-button>
+                                    <el-button size="small" @click="editgoods(scope.$index, scope.row)">详情</el-button>
                                     <el-button type="danger" size="small" @click="up(scope.$index, scope.row)">上架</el-button>
                                 </template>
                             </el-table-column>
@@ -144,7 +148,7 @@
                             <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
                                 <el-form :inline="true" :model="filters">
                                      <el-form-item>
-                                        <el-button type="primary" v-on:click="addUser" style="background-color:#ff4949">发布新产品</el-button>
+                                        <el-button type="primary" v-on:click="addgoods" style="background-color:#ff4949">发布新产品</el-button>
                                     </el-form-item>
                                     <el-form-item style="margin-left:70%;">
                                         <el-input v-model="filters.endDateTime" placeholder="搜索" ></el-input>
@@ -168,7 +172,7 @@
                                 <template scope="scope">{{ scope.row.name }}</template>
                             </el-table-column>
                             <el-table-column
-                                prop="Brands"
+                                prop="brands"
                                 label="品牌"
                                 width="120">
                             </el-table-column>
@@ -176,9 +180,11 @@
                                 prop="stockNum"
                                 label="库存">
                             </el-table-column>
-                            <el-table-column
+                             <el-table-column
                                 label="状态">
-                                已下架
+                               <template scope="scope">  
+                                    已下架
+                                </template>  
                             </el-table-column>
                             <el-table-column
                                 prop="senderId"
@@ -190,7 +196,7 @@
                             </el-table-column>
                             <el-table-column label="操作" width="150">
                                 <template scope="scope">
-                                    <el-button size="small" @click="editUser(scope.$index, scope.row)">详情</el-button>
+                                    <el-button size="small" @click="editgoods(scope.$index, scope.row)">详情</el-button>
                                     <el-button type="danger" size="small" @click="up(scope.$index, scope.row)">上架</el-button>
                                 </template>
                             </el-table-column>
@@ -222,7 +228,7 @@
 					name: ''
 				},
                 activeName: 'first',
-				users: [],
+				goods1: [],
 				total: 0,
 				page: 1,
                 goods2: [],
@@ -237,17 +243,18 @@
 		},
 		methods: {
              loaddata:function(){
-                if(activeName=='first')
+                
+                if(this.activeName=='first')
                 {
                     this.getGoods1();
                 }
-                  if(activeName=='second')
+                  if(this.activeName=='second')
                 {
-                    this.getgoods2();
+                    this.getGoods2();
                 }
-                  if(activeName=='third')
+                  if(this.activeName=='third')
                 {
-                    this.getgoods3();
+                    this.getGoods3();
                 }
                 },
              handleClick(tab, event) {
@@ -259,12 +266,12 @@
                   if(tab.name=='second')
                 {
                     this.$refs.multipleTable.clearSelection();
-                    this.getgoods2();
+                    this.getGoods2();
                 }
                   if(tab.name=='third')
                 {
                     this.$refs.multipleTable.clearSelection();
-                    this.getgoods3();
+                    this.getGoods3();
                 }
             },
               handleCurrentChange(val) {
@@ -320,32 +327,6 @@
 
               });
             },
-            	//获取用户列表
-			getUsers() {
-					let para = {
-					param:"MASTER",//角色[COUNSELOR:顾问，MASTER:达人,BUYER:买手]
-					data:{} 
-				} 
-				this.listLoading = true;
-				getUserList(para).then((res) => { 
-
-					if(res.statusText=="OK"){ 
-						this.$message({ 
-							message: '加载成功',
-							type: 'success'
-						});   
-					this.total = 20;
-					this.users = res.data;
-					this.listLoading = false;  
-					}else{
-						this.$message({
-							message: '加载失败',
-							type: 'warning'
-						});  
-					}
-				});
-
-			},
           //获取热卖列表
               getGoods1() {
                   let para = {
@@ -372,7 +353,7 @@
                 });
               },
             //获取已售罄列表
-              getgoods2() {
+              getGoods2() {
                   let para = {
                   data:{type:'sellout'} 
                 } 
@@ -397,7 +378,7 @@
                 });
               },
             //获取已下架列表
-            getgoods3() {
+            getGoods3() {
                 let para = {
                 data:{type:'offsell'} 
               } 
@@ -457,22 +438,21 @@
 
               });
             },
-            addUser:function () { 
+            addgoods:function () { 
               var pageType="add";
               this.$router.push({ path: '/GoodsAdd',  query: { pageType:"add"}}) 
             }, 
-            editUser: function (index, row) {                 
+            editgoods: function (index, row) {                 
             this.$router.push({ path: '/GoodsAdd', query: {pageType:"edit",goodsid:row.id}}); 
             },
             selsChange: function (sels) {
               this.sels = sels;
             },
            toggleSelection() {
-               var length = this.users.length;
+               var length = this.goods1.length;
                var checklength = this.sels.length;
-               this.$refs.multipleTable.clearSelection();
                     if (length != checklength) {
-                    this.users.forEach(row => {
+                    this.goods1.forEach(row => {
                         this.$refs.multipleTable.toggleRowSelection(row);
                     });
                     } else {
@@ -493,11 +473,12 @@
                                     });
                             });
                   this.listLoading = false;
+                  this.loaddata();
                   this.$message({
                     message: '删除成功',
                     type: 'success'
                   });
-                  this.loaddata();
+                  
               }).catch(() => {
 
               });
