@@ -249,7 +249,7 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
        if(this.pageType=="edit"){
           	editGoodsDetails(para).then((res) => { 
                this.Loading = false; 
-            if(res.statusText=="OK"){ 
+            if(res.status == 200){ 
                 this.$message({
                   message: "保存成功",
                   type: "success"
@@ -265,7 +265,7 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
            }else{
             addGoodsDetails(para).then((res) => { 
               this.Loading = false; 
-            if(res.statusText=="OK"){ 
+            if(res.status == 200){ 
                 this.$message({
                   message: "保存成功",
                   type: "success"

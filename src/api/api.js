@@ -52,9 +52,9 @@ export const addGoodsDetails  =  params => { return axios.post(`${base}/api/add/
 
 export const editGoodsDetails  =  params => { return axios.post(`${base}/api/add/goods/`+ params.token+ (params.param||""),params.data  ); };//,
 
-export const delGoods  = params => { return axios.get(`${base}/api/gooods/remove/`+ params.goodsid,{params: params.data  }); };
+export const delGoods  = params => { return axios.get(`${base}/api/goods/remove/`+ params.goodsid,{params: params.data  }); };
 
-export const upGoods  = params => { return axios.get(`${base}/api/gooods/`+ params.goodsid+'/true',{params: params.data  }); };
+export const upGoods  = params => { return axios.get(`${base}/api/goods/`+ params.goodsid+'/true',{params: params.data  }); };
 
-export const downGoods  = params => { return axios.get(`${base}/api/gooods/`+ params.goodsid+'/false',{params: params.data  }); };
+export const downGoods  = params => { return axios.get(`${base}/api/goods/`+ params.goodsid+'/false',{params: params.data  }); };
 
