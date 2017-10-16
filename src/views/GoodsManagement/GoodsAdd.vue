@@ -201,7 +201,7 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
       //获取用户列表
 			getUsers() {  
 				let para = {
-					param:"COUNSELOR",
+					param:"BUYER",
 					data:{} 
 				} 
 				getUserList(para).then((res) => {
@@ -300,7 +300,8 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
       if(that.pageType=="edit"){
         	let para = {
            token: sessionStorage.getItem('token'),
-           goodsid:that.$router.currentRoute.query.goodsid
+           goodsid:that.$router.currentRoute.query.goodsid,
+           data: { description: 'owner' }
         } 
 				getGoodsDetails(para).then((res) => { 
           this.form = res.data.goods

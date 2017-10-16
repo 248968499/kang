@@ -100,8 +100,8 @@
                     </el-table-column>
                     <el-table-column label="操作" width="150">
                         <template scope="scope">
-                            <el-button size="small" @click="editgoods(scope.$index, scope.row)">详情</el-button>
-                            <el-button type="danger" size="small" @click="up(scope.$index, scope.row)">上架</el-button>
+                             <el-button size="small" @click="editgoods(scope.$index, scope.row)">编辑</el-button>
+                            <el-button type="danger" size="small" @click="down(scope.$index, scope.row)">下架</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -109,8 +109,7 @@
                 <!--工具条-->
                 <el-col :span="24" class="toolbar">
                     <el-button @click="toggleSelection(goods2,2)">全选</el-button>
-                    <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">删除</el-button>
-                    <el-button @click="batchup()" :disabled="this.sels.length===0">上架</el-button>
+                     <el-button @click="batchdown()" :disabled="this.sels.length===0">下架</el-button>
                     <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
                     </el-pagination>
                 </el-col>
@@ -157,7 +156,7 @@
                     </el-table-column>
                     <el-table-column label="操作" width="150">
                         <template scope="scope">
-                            <el-button size="small" @click="editgoods(scope.$index, scope.row)">详情</el-button>
+                            <el-button size="small" @click="editgoods(scope.$index, scope.row)">编辑</el-button>
                             <el-button type="danger" size="small" @click="up(scope.$index, scope.row)">上架</el-button>
                         </template>
                     </el-table-column>
@@ -380,7 +379,7 @@ export default {
             }).then(() => {
                 this.listLoading = true;
                 let para = { goodsid: row.id };
-                downGoods(para).then((res) => {
+                upGoods(para).then((res) => {
                     this.listLoading = false;
                     this.$message({
                         message: '上架成功',

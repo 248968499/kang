@@ -45,7 +45,7 @@ export const getCounselors  = params => { return axios.get(`${base}/api/counselo
 
 export const getGoodsList  = params => { return axios.get(`${base}/api/goods`,{params: params.data  }); };//,
 
-export const getGoodsDetails  = params => { return axios.get(`${base}/api/`+ params.token+'/'+params.goodsid,{params: params.data  }); };//,
+export const getGoodsDetails  = params => { return axios.get(`${base}/api/goods/details/`+ params.token+'/'+params.goodsid,{params: params.data  }); };//,
 
 export const addGoodsDetails  =  params => { return axios.post(`${base}/api/add/goods/`+ params.token+ (params.param||""),params.data  ); };//,
 //params => { return axios.post(`api/api/add/goods/`+ params.token),params.data; };
