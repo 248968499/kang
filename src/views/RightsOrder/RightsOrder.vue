@@ -187,30 +187,9 @@ import { getUserList, getGoodsList, delGoods, upGoods, downGoods } from '../../a
                     this.$refs.multipleTable.clearSelection();
                     this.getGoods3();
                 }
-            },
-            activeName: 'first',
-            goods1: [],
-            total: 0,
-            page: 1,
-            goods2: [],
-            total2: 0,
-            page: 1,
-            goods3: [],
-            total3: 0,
-            page: 1,
-            listLoading: false,
-            sels: [],//列表选中列
+            }
         }
-    },
-    methods: {
-        loaddata: function() {
-            if (activeName == 'first') {
-              }
-          },
-          mounted() {
-        
-          }
-	}
+    }
 
 </script>
 
