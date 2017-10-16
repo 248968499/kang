@@ -71,7 +71,9 @@
         action="api/api/file/up"
          class="avatar-uploader"
         :show-file-list="false"
-        :on-success="handleAvatarSuccess1"
+        :on-success="(res)=>{
+return handleAvatarSuccess1(res, index)
+}"
         :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove"
         :before-upload="beforeAvatarUpload(index)">
@@ -166,13 +168,12 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
       handlePreStep: function () {
             this.step--;
             this.goStep(this.step);
-          $('html,body').animate({scrollTop:0},500);
+         
       },
       handleNextStep: function () {
          var _this = this;
          _this.step++;
          _this.goStep(_this.step);
-        $('html,body').animate({scrollTop:0},500);
 
       },
       handlePublish: function () {
@@ -191,8 +192,7 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
        handleAvatarSuccess(res, file) { 
         this.form.img = res.file ;
       },
-       handleAvatarSuccess1(res, file) { 
-         var index = this.imgindex;
+       handleAvatarSuccess1(res, index) { 
          this.form.description[index].img = res.file ;
       },
        beforeAvatarUpload(index) { 
@@ -304,7 +304,8 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
            data: { description: 'owner' }
         } 
 				getGoodsDetails(para).then((res) => { 
-          this.form = res.data.goods
+          this.form = res.data.goods;
+          this.form.description = res.data.descriptions[0].description;
          this.form.attr.forEach(item => {
                              switch (item.size)
                                     {
