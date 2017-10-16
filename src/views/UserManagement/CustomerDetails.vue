@@ -1,23 +1,19 @@
 
   <template>
   <section>
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tabs v-model="activeName" @tab-click="handleClick" style="width:1500px">
       <el-tab-pane label="顾客详情" v-loading="Loading" name="CustomerDetails">
         <el-form ref="form" :model="form" label-width="80px">
-          <el-row>
-            <el-col :span="1">
-              <el-form-item>
-              </el-form-item>
-            </el-col>
+          <el-row> 
             <el-col :span="4">
               <el-form-item label="头像：" label-width="100px">
-                <el-upload class="avatar-uploader" action="api/api/file/up" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                <el-upload class="avatar-uploader" action="http://121.43.35.110:9000/api/file/up" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
                   <img v-if="form.avatar" :src="form.avatar" class="avatarConsultancyDetails">
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="4">
               <el-form-item label="昵称：">
                 <el-input v-model="form.nickName" placeholder=""></el-input>
               </el-form-item>
@@ -46,11 +42,7 @@
                 </el-date-picker>
                 <!-- <el-input disabled="true" v-model="form.createTime" placeholder=""></el-input> -->
               </el-form-item>
-            </el-col>
-            <el-col :span="4">
-              <el-form-item>
-              </el-form-item>
-            </el-col>
+            </el-col> 
           </el-row>
 
           <el-row>

@@ -1,7 +1,7 @@
 
   <template>
   <section>
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tabs v-model="activeName" @tab-click="handleClick" style="width:1500px">
       <el-tab-pane label="顾问详情" v-loading="Loading" name="ConsultancyDetails">
         <el-form ref="form" :model="form" label-width="80px">
           <el-row>
@@ -10,7 +10,7 @@
             </el-col>
             <el-col :span="7">
               <el-form-item label="头像：" label-width="100px">
-                <el-upload class="avatar-uploader" action="api/api/file/up" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                <el-upload class="avatar-uploader" action="http://121.43.35.110:9000/api/file/up" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
                   <img v-if="form.avatar" :src="form.avatar" class="avatarConsultancyDetails">
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
@@ -25,20 +25,15 @@
               <el-form-item label="昵称：" label-width="100px">
                 <el-input v-model="form.nickName"></el-input>
               </el-form-item>
-              <!-- <el-form-item label="" label-width="100px">
-                <img v-if="qrcodeUrl" :src="qrcodeUrl" class="avatarConsultancyDetails">
-              </el-form-item> -->
-               <el-form-item label="微信二维码：" label-width="100px">
-                <el-upload class="avatar-uploader" action="api/api/file/up" :show-file-list="false" :on-success="handleAvatarSuccess1" :before-upload="beforeAvatarUpload">
+
+              <el-form-item label="微信二维码：" label-width="100px">
+                <el-upload class="avatar-uploader" action="http://121.43.35.110:9000/api/file/up" :show-file-list="false" :on-success="handleAvatarSuccess1" :before-upload="beforeAvatarUpload">
                   <img v-if="form.weixinqrcode" :src="form.weixinqrcode" class="avatarConsultancyDetails">
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </el-form-item>
-              <!-- <el-form-item label="关注二维码：" label-width="100px">
-                <img v-if="qrcodeUrl" :src="qrcodeUrl" class="avatarConsultancyDetails">
-              </el-form-item> -->
-               <el-form-item label="关注二维码：" label-width="100px">
-                <el-upload class="avatar-uploader" action="api/api/file/up" :show-file-list="false" :on-success="handleAvatarSuccess2" :before-upload="beforeAvatarUpload">
+              <el-form-item label="关注二维码：" label-width="100px">
+                <el-upload class="avatar-uploader" action="http://121.43.35.110:9000/api/file/up" :show-file-list="false" :on-success="handleAvatarSuccess2" :before-upload="beforeAvatarUpload">
                   <img v-if="form.followqrcode" :src="form.followqrcode" class="avatarConsultancyDetails">
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
@@ -52,8 +47,8 @@
               <el-form-item label="所在地：" label-width="100px">
                 <el-input v-model="form.address"></el-input>
               </el-form-item>
-              <el-form-item label="注册时间"label-width="100px">
-               <el-date-picker disabled v-model="form.createTime" type="date" placeholder="选择日期" :picker-options="pickerOptions0">
+              <el-form-item label="注册时间" label-width="100px">
+                <el-date-picker disabled v-model="form.createTime" type="date" placeholder="选择日期">
                 </el-date-picker>
               </el-form-item>
               <el-form-item>
@@ -90,7 +85,7 @@ export default {
       qrcodeUrl: "",
       form: {
         id: "",
-        createTime: "",
+        createTime: new Date(),
         nickName: "",
         redPacket: 0,
         name: "",
@@ -105,7 +100,7 @@ export default {
         followNum: 0,
         balance: 0,
         weixinqrcode: "",//微信二维码
-        followqrcode: "",//关注二维码
+        followqrcode: ""//关注二维码
       }
     }
   },
@@ -195,10 +190,14 @@ export default {
             message: "加载成功",
             type: "success"
           });
-          this.form = res.data;
-          this.form.createTime = (!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');
+          var weixinqrcode = res.data.weixinqrcode;
+          var followqrcode = res.data.followqrcode;
+          res.data.weixinqrcode = weixinqrcode ? weixinqrcode : "";//微信二维码
+          res.data.followqrcode = followqrcode ? followqrcode : "";//关注二维码
+          that.form = res.data;
+          that.form.createTime = (!res.data.createTime || res.data.createTime == '') ? '' : util.formatDate.format(new Date(res.data.createTime), 'yyyy-MM-dd');
           that.Loading = false;
-          this.qrcodeUrl = res.data.qrcode;
+          that.qrcodeUrl = res.data.qrcode;
         } else {
           this.$message({
             message: "加载失败",
@@ -213,10 +212,10 @@ export default {
 }
 </script>
 <style>
- .avatarConsultancyDetails {
-   width: 178px;
-   height: 178px;
- }
+.avatarConsultancyDetails {
+  width: 178px;
+  height: 178px;
+}
 </style>
 
 <style>

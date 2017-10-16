@@ -55,7 +55,7 @@
   </el-form-item>
     <el-form-item label="商品首图：" label-width="100px" :hidden="nextStep">
             <el-upload 
-        action="api/api/file/up"
+        action="http://121.43.35.110:9000/api/file/up"
          class="avatar-uploader"
         :show-file-list="false"
         :on-success="handleAvatarSuccess"
@@ -67,7 +67,7 @@
   </el-form-item>
     <el-form-item :label="'详情描述'+(index+1)+':'" label-width="100px" v-for="(domain, index) in form.description" :hidden="nextStep">
            <label>图片：</label> <el-upload 
-        action="api/api/file/up"
+        action="http://121.43.35.110:9000/api/file/up"
          class="avatar-uploader"
         :show-file-list="false"
         :on-success="handleAvatarSuccess1"
