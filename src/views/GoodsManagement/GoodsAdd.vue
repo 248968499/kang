@@ -305,7 +305,13 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
         } 
 				getGoodsDetails(para).then((res) => { 
           this.form = res.data.goods;
-          this.form.description = res.data.descriptions[0].description;
+          this.form.description = [];
+          res.data.descriptions[0].description.forEach(item => {
+            this.form.description.push({
+                              content:item.content,
+                                img:item.img
+                });
+          })
          this.form.attr.forEach(item => {
                              switch (item.size)
                                     {
