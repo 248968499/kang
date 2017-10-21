@@ -1,8 +1,8 @@
 
   <template>
   <section>
-    <el-tabs v-model="activeName" @tab-click="handleClick" style="width:1500px">
-      <el-tab-pane label="顾问详情" v-loading="Loading" name="ConsultancyDetails">
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="顾问详情" v-loading="Loading" name="ConsultancyDetails" style="width:900px">
         <el-form ref="form" :model="form" label-width="80px">
           <el-row>
             <el-col :span="1">
@@ -17,9 +17,9 @@
               </el-form-item>
               <el-form-item label="用户角色" label-width="100px">
                 <el-select v-model="form.role" placeholder="请选择">
-                  <el-option label="时尚达人" value="shanghai"></el-option>
-                  <el-option label="高级时尚顾问" value="beijing"></el-option>
-                  <el-option label="初级时尚顾问" value="COUNSELOR"></el-option>
+                  <el-option label="时尚达人" value="MASTER"></el-option>
+                  <el-option label="高级时尚顾问" value="COUNSELOR"></el-option>
+                  <el-option label="初级时尚顾问" value="BUYER"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="昵称：" label-width="100px">

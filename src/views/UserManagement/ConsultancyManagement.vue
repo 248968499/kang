@@ -15,16 +15,16 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label="注册时间">
-						<el-date-picker v-model="filters.startDateTime" type="date" placeholder="选择日期"> </el-date-picker>
+					<el-date-picker v-model="filters.startTimestamp" type="date" placeholder="选择日期"> </el-date-picker>
 				</el-form-item>
 				<el-form-item label="至">
-					<el-date-picker v-model="filters.endDateTime" type="date" placeholder="选择日期"> </el-date-picker>
+					<el-date-picker v-model="filters.endTimestamp" type="date" placeholder="选择日期"> </el-date-picker>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">筛选</el-button>
+					<el-button type="primary" v-on:click="getUserKeyWord">筛选</el-button>
 				</el-form-item>
 				<el-form-item>
-					<el-input v-model="filters.endDateTime" placeholder="搜索"></el-input>
+					<el-input v-model="filters.keyword" placeholder="搜索"></el-input>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -32,14 +32,14 @@
 		<!--列表-->
 		<el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
 			<el-table-column type="selection" width="55">
-			</el-table-column>                                      
+			</el-table-column>
 			<el-table-column prop="nickName" label="昵称" width="120" sortable>
 			</el-table-column>
 			<el-table-column prop="mobile" label="手机号" width="180" sortable>
 			</el-table-column>
 			<el-table-column prop="birth" label="加入小队" width="120" sortable>
 			</el-table-column>
-			<el-table-column prop="createTime" label="注册时间" min-width="180" sortable>
+			<el-table-column prop="createTime" label="注册时间"  :formatter="formatTime" min-width="180" sortable>
 			</el-table-column>
 			<el-table-column label="操作" width="150">
 				<template scope="scope">
@@ -62,7 +62,7 @@
 import util from '../../common/js/util'
 
 //import NProgress from 'nprogress'
-import { getUserList, login } from '../../api/api';
+import { getUserList, login, getUserKeyWord, delUser } from '../../api/api';
 
 export default {
 	data() {
@@ -79,7 +79,9 @@ export default {
 			}],
 			value: '',
 			filters: {
-				name: ''
+				keyword: '',
+				startTimestamp: "",
+				endTimestamp: ""
 			},
 			users: [],
 			total: 0,
@@ -123,9 +125,41 @@ export default {
 		}
 	},
 	methods: {
-		//性别显示转换
-		formatSex: function(row, column) {
-			return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
+		getUserKeyWord() {
+			if (this.filters.keyword.trim() == "" && this.filters.startTimestamp == "" && this.filters.endTimestamp == "") {
+				this.getUsers();
+				return;
+			} 
+			let para = {
+				param: sessionStorage.getItem('token'),//角色[COUNSELOR:顾问，MASTER:达人,BUYER:买手]
+				data: {
+					keyword: this.filters.keyword,
+					startTimestamp: (Date.parse(this.filters.startTimestamp) / 1000),
+					endTimestamp: (Date.parse(this.filters.endTimestamp) / 1000)
+				}
+			}
+
+			this.listLoading = true;
+			getUserKeyWord(para).then((res) => {
+				if (res.status == 200) {
+					this.$message({
+						message: '加载成功',
+						type: 'success'
+					});
+					this.total = 20;
+					this.users = res.data;
+					this.listLoading = false;
+				} else {
+					this.$message({
+						message: '加载失败',
+						type: 'warning'
+					});
+				}
+			});
+		},
+		formatTime: function(row, column) {
+			return util.formatDate.format(new Date(row.createTime), 'yyyy-MM-dd');
+			//row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
 		},
 		handleCurrentChange(val) {
 			this.page = val;
@@ -260,21 +294,31 @@ export default {
 		},
 		//批量删除
 		batchRemove: function() {
-			var ids = this.sels.map(item => item.id).toString();
+			var ids = this.sels.map(item => item.id);
 			this.$confirm('确认删除选中记录吗？', '提示', {
 				type: 'warning'
 			}).then(() => {
 				this.listLoading = true;
 				//NProgress.start();
-				let para = { ids: ids };
-				batchRemoveUser(para).then((res) => {
+
+				let para = { data: { userIds: ids } };
+				delUser(para).then((res) => {
 					this.listLoading = false;
 					//NProgress.done();
-					this.$message({
-						message: '删除成功',
-						type: 'success'
-					});
+
+					if (res.status == 200) {
+						this.$message({
+							message: '删除成功',
+							type: 'success'
+						});
+					} else {
+						this.$message({
+							message: '删除失败',
+							type: 'warning'
+						});
+					}
 					this.getUsers();
+
 				});
 			}).catch(() => {
 

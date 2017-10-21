@@ -31,14 +31,14 @@
 		<el-col :span="24" class="main">
 			<aside :class="collapsed?'menu-collapsed':'menu-expanded'">
 				<!--导航菜单-->
-				<el-menu style="background-color:#4c4743;" :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect"
+				<el-menu style="background-color:#4c4743;width:160px" :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect"
 					 unique-opened router v-show="!collapsed">
 					<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
-						<el-submenu :index="index+''" v-if="!item.leaf">
+						<!-- <el-submenu :index="index+''" v-if="!item.leaf">
 							<template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
 							<el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
-						</el-submenu>
-						<el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path" style="color:#C8AB86;"><i :class="item.iconCls"></i>{{item.children[0].name}}</el-menu-item>
+						</el-submenu> -->
+						<el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path" style="color:#C8AB86;height:35px; font-size: 12px; line-height:35px;"><i :class="item.iconCls"></i>{{item.children[0].name}}</el-menu-item>
 					</template>
 				</el-menu>
 				<!--导航菜单-折叠后-->
@@ -155,8 +155,8 @@
 		bottom: 0px;
 		width: 100%;
 		.header {
-			height: 80px;
-			line-height: 80px;
+			height: 60px;
+			line-height: 60px;
 			background: $color-primary;
 			color:#fff;
 			.userinfo {
@@ -167,10 +167,11 @@
 					cursor: pointer;
 					color:#fff;
 					img {
-						width: 40px;
-						height: 40px;
+						width: 38px;
+						height: 38px;
 						border-radius: 20px;
-						margin: 20px 0px 20px 20px;
+						margin-top: 2px;
+						margin-left: 20px;
 						float: right;
 					}
 				}
@@ -178,10 +179,9 @@
 			.logo {  
 				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Pingfang SC", "Microsoft Yahei", "WenQuanYi Micro Hei", sans-serif;
 				//width:230px;
-				height:80px;
+				height:60px;
 				font-size: 30px;
-				padding-left:45px;
-				padding-right:20px;
+				padding-left:25px; 
 				border-color: rgba(238,241,146,0.3);
 				font-style: italic;
 				// border-right-width: 1px;
@@ -196,7 +196,7 @@
 				}
 			}
 			.logo-width{
-				width:200px;
+				width:160px;
 			}
 			.logo-collapse-width{
 				width:40px
@@ -210,8 +210,8 @@
 			// }
 			.tools{
 				padding: 0px 23px; 
-				height: 80px;
-				line-height: 80px;
+				height: 60px;
+				line-height: 60px;
 				cursor: pointer; 
 			}
 		}
@@ -219,12 +219,12 @@
 			display: flex;
 			// background: #324057;
 			position: absolute;
-			top: 80px;
+			top: 60px;
 			bottom: 0px;
 			overflow: hidden;
 			aside {
-				flex:0 0 200px;
-				width: 200px;
+				flex:0 0 160px;
+				width: 160px;
 				// position: absolute;
 				// top: 0px;
 				// bottom: 0px;
@@ -252,8 +252,8 @@
 				width: 60px;
 			}
 			.menu-expanded{
-				flex:0 0 200px;
-				width: 200px;
+				flex:0 0 160px;
+				width: 160px;
 			}
 			.content-container {
 				// background: #f1f2f7;
@@ -264,11 +264,11 @@
 				// bottom: 0px;
 				// left: 230px;
 				overflow-y: scroll;
-				padding: 20px;
+				  padding-left: 20px;
 				.breadcrumb-container {
 					//margin-bottom: 15px;
 					.title {
-						width: 200px;
+						width: 100px;
 						float: left;
 						color: #475669;
 					}

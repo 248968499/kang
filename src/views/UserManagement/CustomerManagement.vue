@@ -7,16 +7,16 @@
 					<el-button type="primary" v-on:click="addUser">添加</el-button>
 				</el-form-item>
 				<el-form-item label="注册时间">
-						<el-date-picker v-model="filters.startDateTime" type="date" placeholder="选择日期"> </el-date-picker>
+					<el-date-picker v-model="filters.startTimestamp" type="date" placeholder="选择日期"> </el-date-picker>
 				</el-form-item>
 				<el-form-item label="至">
-					<el-date-picker v-model="filters.endDateTime" type="date" placeholder="选择日期"> </el-date-picker>
+					<el-date-picker v-model="filters.endTimestamp" type="date" placeholder="选择日期"> </el-date-picker>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">筛选</el-button>
+					<el-button type="primary" v-on:click="getUserKeyWord">筛选</el-button>
 				</el-form-item>
 				<el-form-item>
-					<el-input v-model="filters.endDateTime" placeholder="搜索"></el-input>
+					<el-input v-model="filters.keyword" placeholder="搜索"></el-input>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -31,7 +31,7 @@
 			</el-table-column>
 			<el-table-column prop="counselors" label="归属顾问" width="180" sortable>
 			</el-table-column>
-			<el-table-column prop="createTime" label="注册时间" width="180" sortable>
+			<el-table-column prop="createTime" label="注册时间" :formatter="formatTime" width="180" sortable>
 			</el-table-column>
 			<el-table-column prop="state" label="状态" min-width="180" sortable>
 			</el-table-column>
@@ -45,7 +45,7 @@
 
 		<!--工具条-->
 		<el-col :span="24" class="toolbar">
-			<!-- <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button> -->
+			<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
 			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
 			</el-pagination>
 		</el-col>
@@ -53,14 +53,16 @@
 </template>
 
 <script>
-import util from '../../common/js/util'  
-import { getUserList, login, getCounselors } from '../../api/api';
+import util from '../../common/js/util'
+import { getUserList, login, getCounselors, getUserKeyWord, delUser } from '../../api/api';
 
 export default {
 	data() {
 		return {
 			filters: {
-				name: ''
+				keyword: '',
+				startTimestamp: "",
+				endTimestamp: ""
 			},
 			users: [],
 			total: 20,
@@ -103,9 +105,43 @@ export default {
 		}
 	},
 	methods: {
+		getUserKeyWord() {
+			debugger
+			if (this.filters.keyword.trim() == "" && this.filters.startTimestamp == "" && this.filters.endTimestamp == "") {
+				this.getUsers();
+				return;
+			}
+			let para = {
+				param: sessionStorage.getItem('token'),//角色[COUNSELOR:顾问，MASTER:达人,BUYER:买手]
+				data: {
+					keyword: this.filters.keyword, 
+					startTimestamp: (Date.parse(this.filters.startTimestamp) / 1000),
+					endTimestamp: (Date.parse(this.filters.endTimestamp) / 1000)
+				}
+			}
+
+			this.listLoading = true;
+			getUserKeyWord(para).then((res) => {
+				if (res.status == 200) {
+					this.$message({
+						message: '加载成功',
+						type: 'success'
+					});
+					this.total = 20;
+					this.users = res.data;
+					this.listLoading = false;
+				} else {
+					this.$message({
+						message: '加载失败',
+						type: 'warning'
+					});
+				}
+			});
+		},
 		//性别显示转换
-		formatSex: function(row, column) {
-			return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
+		formatTime: function(row, column) {
+			return util.formatDate.format(new Date(row.createTime), 'yyyy-MM-dd');
+			//row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
 		},
 		handleCurrentChange(val) {
 			this.page = val;
@@ -117,7 +153,7 @@ export default {
 				param: "MASTER",//角色[COUNSELOR:顾问，MASTER:达人,BUYER:买手]
 				data: {}
 			}
-			
+
 			this.listLoading = true;
 			//NProgress.start();
 			getUserList(para).then((res) => {
@@ -125,7 +161,7 @@ export default {
 					this.$message({
 						message: '加载成功',
 						type: 'success'
-					}); 
+					});
 					// for (var key in res.data) {
 					// 	var data = res.data[key];
 					// 	let para = {
@@ -141,7 +177,7 @@ export default {
 					// 	});
 					// }
 
-					this.users =res.data;
+					this.users = res.data;
 					this.listLoading = false;
 				} else {
 					this.$message({
@@ -150,18 +186,6 @@ export default {
 					});
 				}
 			});
-			// let para = {
-			// 	page: this.page,
-			// 	name: this.filters.name
-			// };
-			// this.listLoading = true;
-			// //NProgress.start();
-			// getUserListPage(para).then((res) => {
-			// 	this.total = res.data.total;
-			// 	this.users = res.data.users;
-			// 	this.listLoading = false;
-			// 	//NProgress.done();
-			// });
 		},
 		//删除
 		handleDel: function(index, row) {
@@ -261,15 +285,23 @@ export default {
 				type: 'warning'
 			}).then(() => {
 				this.listLoading = true;
-				//NProgress.start();
-				let para = { ids: ids };
-				batchRemoveUser(para).then((res) => {
+				//NProgress.start(); 
+				let para = { data: { userIds: ids } };
+				delUser(para).then((res) => {
 					this.listLoading = false;
 					//NProgress.done();
-					this.$message({
-						message: '删除成功',
-						type: 'success'
-					});
+
+					if (res.status == 200) {
+						this.$message({
+							message: '删除成功',
+							type: 'success'
+						});
+					} else {
+						this.$message({
+							message: '删除失败',
+							type: 'warning'
+						});
+					}
 					this.getUsers();
 				});
 			}).catch(() => {

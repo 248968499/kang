@@ -56,7 +56,7 @@
   </el-form-item>
     <el-form-item label="商品首图：" label-width="100px" :hidden="nextStep">
             <el-upload 
-        action="api/api/file/up"
+        action="http://121.43.35.110:9000/api/file/up"
          class="avatar-uploader"
         :show-file-list="false"
         :on-success="handleAvatarSuccess"
@@ -68,12 +68,10 @@
   </el-form-item>
     <el-form-item :label="'详情描述'+(index+1)+':'" label-width="100px" v-for="(domain, index) in form.description" :hidden="nextStep">
           <br><label>图片：</label> <el-upload 
-        action="api/api/file/up"
+        action="http://121.43.35.110:9000/api/file/up"
          class="avatar-uploader"
         :show-file-list="false"
-        :on-success="(res)=>{
-return handleAvatarSuccess1(res, index)
-}"
+        :on-success="handleAvatarSuccess1"
         :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove"
         :before-upload="beforeAvatarUpload(index)">
@@ -168,12 +166,13 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
       handlePreStep: function () {
             this.step--;
             this.goStep(this.step);
-         
+          $('html,body').animate({scrollTop:0},500);
       },
       handleNextStep: function () {
          var _this = this;
          _this.step++;
          _this.goStep(_this.step);
+        $('html,body').animate({scrollTop:0},500);
 
       },
       handlePublish: function () {
@@ -192,7 +191,8 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
        handleAvatarSuccess(res, file) { 
         this.form.img = res.file ;
       },
-       handleAvatarSuccess1(res, index) { 
+       handleAvatarSuccess1(res, file) { 
+         var index = this.imgindex;
          this.form.description[index].img = res.file ;
       },
        beforeAvatarUpload(index) { 
@@ -201,7 +201,7 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
       //获取用户列表
 			getUsers() {  
 				let para = {
-					param:"BUYER",
+					param:"COUNSELOR",
 					data:{} 
 				} 
 				getUserList(para).then((res) => {
@@ -249,7 +249,7 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
        if(this.pageType=="edit"){
           	editGoodsDetails(para).then((res) => { 
                this.Loading = false; 
-            if(res.status == 200){ 
+           if (res.status == 200) {
                 this.$message({
                   message: "保存成功",
                   type: "success"
@@ -265,7 +265,7 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
            }else{
             addGoodsDetails(para).then((res) => { 
               this.Loading = false; 
-            if(res.status == 200){ 
+           if (res.status == 200) {
                 this.$message({
                   message: "保存成功",
                   type: "success"
@@ -300,18 +300,10 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
       if(that.pageType=="edit"){
         	let para = {
            token: sessionStorage.getItem('token'),
-           goodsid:that.$router.currentRoute.query.goodsid,
-           data: { description: 'owner' }
+           goodsid:that.$router.currentRoute.query.goodsid
         } 
 				getGoodsDetails(para).then((res) => { 
-          this.form = res.data.goods;
-          this.form.description = [];
-          res.data.descriptions[0].description.forEach(item => {
-            this.form.description.push({
-                              content:item.content,
-                                img:item.img
-                });
-          })
+          this.form = res.data.goods
          this.form.attr.forEach(item => {
                              switch (item.size)
                                     {

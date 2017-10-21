@@ -1,11 +1,15 @@
 
   <template>
   <section>
-    <el-tabs v-model="activeName" @tab-click="handleClick" style="width:1500px">
-      <el-tab-pane label="顾客详情" v-loading="Loading" name="CustomerDetails">
+    <el-tabs v-model="activeName" @tab-click="handleClick" >
+      <el-tab-pane label="顾客详情" v-loading="Loading" name="CustomerDetails" style="width:900px">
         <el-form ref="form" :model="form" label-width="80px">
           <el-row> 
-            <el-col :span="4">
+             <el-col :span="1">
+              <el-form-item>
+              </el-form-item>
+            </el-col>
+            <el-col :span="7">
               <el-form-item label="头像：" label-width="100px">
                 <el-upload class="avatar-uploader" action="http://121.43.35.110:9000/api/file/up" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
                   <img v-if="form.avatar" :src="form.avatar" class="avatarConsultancyDetails">
@@ -13,7 +17,7 @@
                 </el-upload>
               </el-form-item>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="7">
               <el-form-item label="昵称：">
                 <el-input v-model="form.nickName" placeholder=""></el-input>
               </el-form-item>
@@ -26,7 +30,7 @@
                 <el-input v-model="form.mobile" placeholder=""></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="7">
               <el-form-item label="生日：">
                 <el-date-picker v-model="form.birthday" type="date" placeholder="选择日期">
                 </el-date-picker>
@@ -43,6 +47,11 @@
                 <!-- <el-input disabled="true" v-model="form.createTime" placeholder=""></el-input> -->
               </el-form-item>
             </el-col> 
+            
+             <el-col :span="1">
+              <el-form-item>
+              </el-form-item>
+            </el-col>
           </el-row>
 
           <el-row>
