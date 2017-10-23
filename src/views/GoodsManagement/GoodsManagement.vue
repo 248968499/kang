@@ -53,7 +53,7 @@
                 <el-col :span="24" class="toolbar">
                     <el-button @click="toggleSelection(goods1,1)">全选</el-button>
                     <el-button @click="batchdown()" :disabled="this.sels.length===0">下架</el-button>
-                    <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
+                    <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="pageSize" :total="total1" style="float:right;">
                     </el-pagination>
                 </el-col>
 
@@ -110,7 +110,7 @@
                 <el-col :span="24" class="toolbar">
                     <el-button @click="toggleSelection(goods2,2)">全选</el-button>
                      <el-button @click="batchdown()" :disabled="this.sels.length===0">下架</el-button>
-                    <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
+                    <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="pageSize" :total="total2" style="float:right;">
                     </el-pagination>
                 </el-col>
 
@@ -167,7 +167,7 @@
                     <el-button @click="toggleSelection(goods3,3)">全选</el-button>
                     <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">删除</el-button>
                     <el-button @click="batchup()" :disabled="this.sels.length===0">上架</el-button>
-                    <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
+                    <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="pageSize" :total="total3" style="float:right;">
                     </el-pagination>
                 </el-col>
             </el-tab-pane>
@@ -187,51 +187,53 @@ export default {
                 name: ''
             },
             activeName: 'first',
+            pageSize:10,
             goods1: [],
-            total: 0,
-            page: 1,
+            total1: 0,
             goods2: [],
             total2: 0,
-            page: 1,
             goods3: [],
             total3: 0,
-            page: 1,
             listLoading: false,
             sels: [],//列表选中列
         }
     },
     methods: {
         loaddata: function() {
-
             if (this.activeName == 'first') {
-                this.getGoods1();
+                this.getGoods1(0);
             }
             if (this.activeName == 'second') {
-                this.getGoods2();
+                this.getGoods2(0);
             }
             if (this.activeName == 'third') {
-                this.getGoods3();
+                this.getGoods3(0);
             }
         },
         handleClick(tab, event) {
             if (tab.name == 'first') {
                 this.$refs.multipleTable1.clearSelection();
-                this.getGoods1();
+                this.getGoods1(0);
             }
             if (tab.name == 'second') {
                 this.$refs.multipleTable2.clearSelection();
-                this.getGoods2();
+                this.getGoods2(0);
             }
             if (tab.name == 'third') {
                 this.$refs.multipleTable3.clearSelection();
-                this.getGoods3();
+                this.getGoods3(0);
             }
         },
         handleCurrentChange(val) {
-            this.page = val;
-            this.getGoods1();
-            this.getGoods2();
-            this.getGoods3();
+             if (this.activeName == 'first') {
+                this.getGoods1(val-1);
+            }
+            if (this.activeName == 'second') {
+                this.getGoods2(val-1);
+            }
+            if (this.activeName == 'third') {
+                this.getGoods3(val-1);
+            }
         },
 
         batchup() {
@@ -281,9 +283,9 @@ export default {
             });
         },
         //获取热卖列表
-        getGoods1() {
+        getGoods1(page) {
             let para = {
-                data: { type: '' }
+                data: { type: '' ,size:this.pageSize,page:page}
             }
             this.listLoading = true;
             getGoodsList(para).then((res) => {
@@ -292,8 +294,8 @@ export default {
                         message: '热卖列表加载成功',
                         type: 'success'
                     });
-                    this.total1 = 20;
-                    this.goods1 = res.data;
+                    this.total1 = res.data.totalSize;
+                    this.goods1 = res.data.goods;
                     this.listLoading = false;
                 } else {
                     this.$message({
@@ -301,14 +303,12 @@ export default {
                         type: 'warning'
                     });
                 }
-
-                console.log(res)
             });
         },
         //获取已售罄列表
-        getGoods2() {
+        getGoods2(page) {
             let para = {
-                data: { type: 'sellout' }
+                data: { type: 'sellout',size:this.pageSize,page:page }
             }
             this.listLoading = true;
             getGoodsList(para).then((res) => {
@@ -317,8 +317,8 @@ export default {
                         message: '已售罄列表加载成功',
                         type: 'success'
                     });
-                    this.total2 = 20;
-                    this.goods2 = res.data;
+                    this.total2 =  res.data.totalSize;
+                    this.goods2 = res.data.goods;
                     this.listLoading = false;
                 } else {
                     this.$message({
@@ -326,14 +326,12 @@ export default {
                         type: 'warning'
                     });
                 }
-
-                console.log(res)
             });
         },
         //获取已下架列表
-        getGoods3() {
+        getGoods3(page) {
             let para = {
-                data: { type: 'offsell' }
+                data: { type: 'offsell',size:this.pageSize,page:page }
             }
             this.listLoading = true;
             getGoodsList(para).then((res) => {
@@ -342,8 +340,8 @@ export default {
                         message: '已下架列表加载成功',
                         type: 'success'
                     });
-                    this.total3 = 20;
-                    this.goods3 = res.data;
+                    this.total3 = res.data.totalSize;
+                    this.goods3 = res.data.goods;
                     this.listLoading = false;
                 } else {
                     this.$message({
@@ -351,8 +349,6 @@ export default {
                         type: 'warning'
                     });
                 }
-
-                console.log(res)
             });
         },
         down: function(index, row) {
@@ -456,7 +452,7 @@ export default {
         }
     },
     mounted() {
-        this.getGoods1();
+        this.getGoods1(0);
     }
 }
 

@@ -58,3 +58,5 @@ export const upGoods  = params => { return axios.get(`${base}/api/goods/`+ param
 
 export const downGoods  = params => { return axios.get(`${base}/api/goods/`+ params.goodsid+'/false',{params: params.data  }); };
 
+export const getRightsOrderList  = params => { return axios.get(`${base}/api/find/user/unfinished/order/`+ params.token,{params: params.data  }); };//,
+
