@@ -60,3 +60,7 @@ export const downGoods  = params => { return axios.get(`${base}/api/goods/`+ par
 
 export const getRightsOrderList  = params => { return axios.get(`${base}/api/find/user/unfinished/order/`+ params.token,{params: params.data  }); };//,
 
+
+export const passRefund  =params => { return axios.post(`${base}/api/agree/for/refund/`+ params.token+ (params.param||""),params.data  ); };//
+
+
