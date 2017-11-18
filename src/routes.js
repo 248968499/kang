@@ -37,7 +37,7 @@ let routes = [
         component: NotFound,
         name: '',
         hidden: true
-    }, 
+    },
     //{ path: '/main', component: Main },
     // {
     //     path: '/',
@@ -101,15 +101,24 @@ let routes = [
         ]
     },
     {
-        path: '/',
+        path: '/OrderDetalis',
         component: Home,
-        name: '',
-        iconCls: 'fa fa-address-card',
-        leaf: true,//只有一个节点
+        name: '订单管理',
+        hidden: true,
         children: [
             { path: '/OrderDetalis', component: OrderDetalis, name: '订单详情' }
         ]
     },
+    // {
+    //     path: '/',
+    //     component: Home,
+    //     name: '',
+    //     iconCls: 'fa fa-address-card',
+    //     leaf: true,//只有一个节点
+    //     children: [
+    //         { path: '/', component: Page6, name: '批量发货' }
+    //     ]
+    // },
     {
         path: '/',
         component: Home,
@@ -117,7 +126,7 @@ let routes = [
         iconCls: 'fa fa-address-card',
         leaf: true,//只有一个节点
         children: [
-            { path: '/', component: Page6, name: '批量发货' }
+            { path: '/Page4', component: Page4, name: '批量发货' }
         ]
     },
     {
@@ -127,7 +136,7 @@ let routes = [
         iconCls: 'fa fa-address-card',
         leaf: true,//只有一个节点
         children: [
-            { path: '/', component: Page6, name: '批量发货' }
+            { path: '/Page5', component: Page5, name: '批量退款' }
         ]
     },
     {
@@ -137,17 +146,7 @@ let routes = [
         iconCls: 'fa fa-address-card',
         leaf: true,//只有一个节点
         children: [
-            { path: '/', component: Page6, name: '批量退款' }
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
-        name: '',
-        iconCls: 'fa fa-address-card',
-        leaf: true,//只有一个节点
-        children: [
-            { path: '/', component: Page6, name: '快速打单' }
+            { path: '/Page6', component: Page6, name: '快速打单' }
         ]
     },
     {
@@ -178,7 +177,7 @@ let routes = [
         children: [
             { path: '/GoodsAdd', component: GoodsAdd, name: '发布新产品' }
         ]
-    }, 
+    },
     {
         path: '/',
         component: Home,
@@ -207,7 +206,7 @@ let routes = [
         children: [
             { path: '/CustomerDetails', component: CustomerDetails, name: '顾客详情' }
         ]
-    }, 
+    },
     {
         path: '/',
         component: Home,
@@ -221,12 +220,12 @@ let routes = [
     {
         path: '/BuyingDetails',
         component: Home,
-        name: '顾客管理',
+        name: '买手管理',
         hidden: true,
         children: [
             { path: '/BuyingDetails', component: BuyingDetails, name: '买手详情' }
         ]
-    }, 
+    },
     {
         path: '/',
         component: Home,
@@ -245,8 +244,8 @@ let routes = [
         children: [
             { path: '/ConsultancyDetails', component: ConsultancyDetails, name: '顾问详情' }
         ]
-    }, 
-    
+    },
+
     {
         path: '*',
         hidden: true,

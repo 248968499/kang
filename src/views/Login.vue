@@ -16,98 +16,98 @@
 </template>
 
 <script>
-  import { login } from '../api/api';
-  //import NProgress from 'nprogress'
-  export default {
-    data() {
-      return {
-        logining: false,
-        ruleForm2: {
-          account: 'admin',
-          checkPass: '123456'
-        },
-        rules2: {
-          account: [
-            { required: true, message: '请输入账号', trigger: 'blur' },
-            //{ validator: validaePass }
-          ],
-          checkPass: [
-            { required: true, message: '请输入密码', trigger: 'blur' },
-            //{ validator: validaePass2 }
-          ]
-        },
-        checked: true
-      };
-    },
-    methods: { 
-      showMessage(message,success){
+import { login } from "../api/api";
+//import NProgress from 'nprogress'
+export default {
+  data() {
+    return {
+      logining: false,
+      ruleForm2: {
+        account: "admin",
+        checkPass: "123456"
+      },
+      rules2: {
+        account: [
+          { required: true, message: "请输入账号", trigger: "blur" }
+          //{ validator: validaePass }
+        ],
+        checkPass: [
+          { required: true, message: "请输入密码", trigger: "blur" }
+          //{ validator: validaePass2 }
+        ]
+      },
+      checked: true
+    };
+  },
+  methods: {
+    showMessage(message, success) {
       this.$message({
-							message: message,
-							type: success
-						});
-      },
-      handleReset2() {
-        this.$refs.ruleForm2.resetFields();
-      },
-      handleSubmit2(ev) { 
-        var _this = this;  
-            _this.logining = true; 
-            var  params={ data : {
-                        openId:"o10ngjojdB9nEYqAyrUr_Nv0cyP4",
-                        nickName:"小贝",
-                        unionid:"o10ngjojdB9nEYqAyrUr_Nv0cyP4"
-                    }}
-                     login(params).then(function(data){ 
-             if(data.status&&data.status==200){
-              _this.logining = false;  
-              _this.showMessage("登陆成功","success");
-                 sessionStorage.setItem('token',data.data.token);
-                _this.$router.push({ path: '/CustomerManagement' }); 
-                }else
-                { 
-              _this.logining = false;  
-              _this.showMessage("登陆失败","warning");
-                }
-            }); 
-            // login(params).then(data => { 
-              
-            //  if(data.statusText&&data.statusText=="OK"){
-            //   _this.logining = false;  
-            //   _this.showMessage("登陆成功","success");
-            //      sessionStorage.setItem('token',data.data.token);
-            //     this.$router.push({ path: '/CustomerManagement' }); 
-            //     }else
-            //     { debugger
-            //   _this.logining = false;  
-            //   _this.showMessage("登陆失败","warning");
-            //     }
-            // }); 
-      }
+        message: message,
+        type: success
+      });
+    },
+    handleReset2() {
+      this.$refs.ruleForm2.resetFields();
+    },
+    handleSubmit2(ev) {
+      var _this = this;
+      _this.logining = true;
+      var params = {
+        data: {
+          openId: "ojQl4wkLv78EAgOp8dJmSFt55PmE",
+          nickName: "心如止水",
+          unionid: "ojQl4wkLv78EAgOp8dJmSFt55PmE"
+        }
+      };
+      login(params).then(function(data) {
+        if (data.status && data.status == 200) {
+          _this.logining = false;
+          _this.showMessage("登陆成功", "success");
+          sessionStorage.setItem("token", data.data.token);
+          _this.$router.push({ path: "/CustomerManagement" });
+        } else {
+          _this.logining = false;
+          _this.showMessage("登陆失败", "warning");
+        }
+      });
+      // login(params).then(data => {
+
+      //  if(data.statusText&&data.statusText=="OK"){
+      //   _this.logining = false;
+      //   _this.showMessage("登陆成功","success");
+      //      sessionStorage.setItem('token',data.data.token);
+      //     this.$router.push({ path: '/CustomerManagement' });
+      //     }else
+      //     { debugger
+      //   _this.logining = false;
+      //   _this.showMessage("登陆失败","warning");
+      //     }
+      // });
     }
   }
-
+};
 </script>
 
 <style lang="scss" scoped>
-  .login-container {
-    /*box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.06), 0 1px 0px 0 rgba(0, 0, 0, 0.02);*/
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    background-clip: padding-box;
-    margin: 180px auto;
-    width: 350px;
-    padding: 35px 35px 15px 35px;
-    background: #fff;
-    border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
-    .title {
-      margin: 0px auto 40px auto;
-      text-align: center;
-      color: #505458;
-    }
-    .remember {
-      margin: 0px 0px 35px 0px;
-    }
+.login-container {
+  /*box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.06), 0 1px 0px 0 rgba(0, 0, 0, 0.02);*/
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  background-clip: padding-box;
+  margin: 180px auto;
+  width: 350px;
+  padding: 35px 35px 15px 35px;
+  background: #fff;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 0 25px #cac6c6;
+  .title {
+    margin: 0px auto 40px auto;
+    text-align: center;
+    color: #505458;
   }
+  .remember {
+    margin: 0px 0px 35px 0px;
+  }
+}
 </style>

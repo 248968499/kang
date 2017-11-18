@@ -163,200 +163,198 @@
 </template>
 
 <script>
-import util from '../../common/js/util'
+import util from "../../common/js/util";
 //import NProgress from 'nprogress' this.$route.query.receiveID
-import { getRightsOrderList,passRefund} from '../../api/api';
+import { getRightsOrderList, passRefund } from "../../api/api";
 
-	export default {
-		data() {
-			return {
-				filters: {
-					name: '',
-                    oderNo:'',
-                    refundOrderCode:'',
-                    startDateTime:'',
-                    endDateTime:''
-				},
-                activeName: 'first',
-                pageSize:10,
-				order1: [],
-				total1: 0,
-                order2: [],
-				total2: 0,
-				listLoading: false,
-				sels: [],//列表选中列
-                editFormVisible: false,//编辑界面是否显示
-				editLoading: false,
-				//编辑界面数据
-				editForm: {
-					refundMessage: '',
-					apllyRefundDate: '',
-					refundState: '',
-					userName: '',
-					expressNo: ''
-				}
-			}
-		},
-		methods: {
-             loaddata:function(){
-                if(activeName=='first')
-                {
-                    this.getOrder1(0);
-                }
-                  if(activeName=='second')
-                {
-                    this.getOrder2(0);
-                }
-                },
-             handleClick(tab, event) {
-                 if(tab.name=='first')
-                {
-                    this.getOrder1(0);
-                }
-                  if(tab.name=='second')
-                {
-                    this.getOrder2(0);
-                }
-            },
-        handleCurrentChange(val) {
-             if (this.activeName == 'first') {
-                this.getOrder1(val-1);
-            }
-            if (this.activeName == 'second') {
-                this.getOrder2(val-1);
-            }
-        },
-        //获取退款中列表
-        getOrder1(page) {
-            let para = {
-                token: sessionStorage.getItem('token'),
-                data: { refundState: 'APPLY',size:this.pageSize,page:page }
-            }
-            this.listLoading = true;
-            getRightsOrderList(para).then((res) => {
-                if (res.status == 200) {
-                    this.$message({
-                        message: '退款中列表加载成功',
-                        type: 'success'
-                    });
-                    this.total1 = res.data.totalSize;
-                    this.order1 = res.data.orders;
-                    this.listLoading = false;
-                } else {
-                    this.$message({
-                        message: '退款中列表加载失败',
-                        type: 'warning'
-                    });
-                }
-            });
-        },
-        //获取已退款列表
-        getOrder2(page) {
-            let para = {
-                token: sessionStorage.getItem('token'),
-                data: { refundState: 'FINISH',size:this.pageSize,page:page  }
-            }
-            this.listLoading = true;
-            getRightsOrderList(para).then((res) => {
-                if (res.status == 200) {
-                    this.$message({
-                        message: '已退款列表加载成功',
-                        type: 'success'
-                    });
-                    this.total2 = res.data.totalSize;
-                    this.order2 = res.data.orders;
-                    this.listLoading = false;
-                } else {
-                    this.$message({
-                        message: '已退款中列表加载失败',
-                        type: 'warning'
-                    });
-                }
-            });
-        },
-        selsChange: function(sels) {
-            this.sels = sels;
-        },
-        toggleSelection(rows, index) {
-            var length = rows.length;
-            var checklength = this.sels.length;
-            if (length != checklength) {
-                 if (index == 1)
-                    this.$refs.multipleTable1.clearSelection();
-                if (index == 2)
-                    this.$refs.multipleTable2.clearSelection();
-            }
-            if (rows) {
-                rows.forEach(row => {
-                    if (index == 1)
-                        this.$refs.multipleTable1.toggleRowSelection(row);
-                    if (index == 2)
-                        this.$refs.multipleTable2.toggleRowSelection(row);
-                });
-            } else {
-                if (index == 1)
-                    this.$refs.multipleTable1.clearSelection();
-                if (index == 2)
-                    this.$refs.multipleTable2.clearSelection();
-            }
-        },
-        Pass: function(index, row) {
-            this.$confirm('确认通过该退款申请吗?', '提示', {
-                type: 'warning'
-            }).then(() => {
-                this.listLoading = true;
-                let para = {  token: sessionStorage.getItem('token'),
-                data: { orderId: row.id,
-                            agree:true } };
-                passRefund(para).then((res) => {
-                    this.listLoading = false;
-                    this.$message({
-                        message: '通过退款申请成功',
-                        type: 'success'
-                    });
-                    this.loaddata();
-                });
-            }).catch(() => {
-
-            });
-        },
-        NotPass: function(index, row) {
-            this.$confirm('确认不通过该退款申请吗?', '提示', {
-                type: 'warning'
-            }).then(() => {
-                this.listLoading = true;
-                let para = { token: sessionStorage.getItem('token'),
-                data: { orderId: row.id,
-                            agree:true }};
-                passRefund(para).then((res) => {
-                    this.listLoading = false;
-                    this.$message({
-                        message: '不通过退款申请成功',
-                        type: 'success'
-                    });
-                    this.loaddata();
-                });
-            }).catch(() => {
-
-            });
-        },
-			//显示编辑界面
-			handleEdit: function (index, row) {
-				this.editFormVisible = true;
-				this.editForm = Object.assign({}, row);
-                if(this.editForm.refundState == 'APPLY'){
-                    this.editForm.refundState = '退款中';
-                }
-                else{
-                    this.editForm.refundState = '已退款';
-                }
-			},
-        },
-        mounted() {
+export default {
+  data() {
+    return {
+      filters: {
+        name: "",
+        oderNo: "",
+        refundOrderCode: "",
+        startDateTime: "",
+        endDateTime: ""
+      },
+      activeName: "first",
+      pageSize: 10,
+      page: 0,
+      order1: [],
+      total1: 0,
+      order2: [],
+      total2: 0,
+      listLoading: false,
+      sels: [], //列表选中列
+      editFormVisible: false, //编辑界面是否显示
+      editLoading: false,
+      //编辑界面数据
+      editForm: {
+        refundMessage: "",
+        apllyRefundDate: "",
+        refundState: "",
+        userName: "",
+        expressNo: ""
+      }
+    };
+  },
+  methods: {
+    loaddata: function() {
+      if (activeName == "first") {
         this.getOrder1(0);
+      }
+      if (activeName == "second") {
+        this.getOrder2(0);
+      }
+    },
+    handleClick(tab, event) {
+      if (tab.name == "first") {
+        this.getOrder1(0);
+      }
+      if (tab.name == "second") {
+        this.getOrder2(0);
+      }
+    },
+    handleCurrentChange(val) {
+      this.page = val - 1;
+      if (this.activeName == "first") {
+        this.getOrder1(val - 1);
+      }
+      if (this.activeName == "second") {
+        this.getOrder2(val - 1);
+      }
+    },
+    //获取退款中列表
+    getOrder1() {
+      let para = {
+        token: sessionStorage.getItem("token"),
+        data: { refundState: "APPLY", size: this.pageSize, page: this.page }
+      };
+      this.listLoading = true;
+      getRightsOrderList(para).then(res => {
+        if (res.status == 200) {
+          this.$message({
+            message: "退款中列表加载成功",
+            type: "success"
+          });
+          this.total1 = res.data.totalSize;
+          this.order1 = res.data.orders;
+          this.listLoading = false;
+        } else {
+          this.$message({
+            message: "退款中列表加载失败",
+            type: "warning"
+          });
         }
+      });
+    },
+    //获取已退款列表
+    getOrder2() {
+      let para = {
+        token: sessionStorage.getItem("token"),
+        data: { refundState: "FINISH", size: this.pageSize, page:this.page }
+      };
+      this.listLoading = true;
+      getRightsOrderList(para).then(res => {
+        if (res.status == 200) {
+          this.$message({
+            message: "已退款列表加载成功",
+            type: "success"
+          });
+          this.total2 = res.data.totalSize;
+          this.order2 = res.data.orders;
+          this.listLoading = false;
+        } else {
+          this.$message({
+            message: "已退款中列表加载失败",
+            type: "warning"
+          });
+        }
+      });
+    },
+    selsChange: function(sels) {
+      this.sels = sels;
+    },
+    toggleSelection(rows, index) {
+      var length = rows.length;
+      var checklength = this.sels.length;
+      if (length != checklength) {
+        if (index == 1) this.$refs.multipleTable1.clearSelection();
+        if (index == 2) this.$refs.multipleTable2.clearSelection();
+      }
+      if (rows) {
+        rows.forEach(row => {
+          if (index == 1) this.$refs.multipleTable1.toggleRowSelection(row);
+          if (index == 2) this.$refs.multipleTable2.toggleRowSelection(row);
+        });
+      } else {
+        if (index == 1) this.$refs.multipleTable1.clearSelection();
+        if (index == 2) this.$refs.multipleTable2.clearSelection();
+      }
+    },
+    Pass: function(index, row) {
+      this.$confirm("确认通过该退款申请吗?", "提示", {
+        type: "warning"
+      })
+        .then(() => {
+          this.listLoading = true;
+          let para = {
+            token: sessionStorage.getItem("token"),
+            data: {
+              orderId: row.id,
+              agree: true
+            }
+          };
+          passRefund(para).then(res => {
+            this.listLoading = false;
+            this.$message({
+              message: "通过退款申请成功",
+              type: "success"
+            });
+            this.loaddata();
+          });
+        })
+        .catch(() => {});
+    },
+    NotPass: function(index, row) {
+      this.$confirm("确认不通过该退款申请吗?", "提示", {
+        type: "warning"
+      })
+        .then(() => {
+          this.listLoading = true;
+          let para = {
+            token: sessionStorage.getItem("token"),
+            data: {
+              orderId: row.id,
+              agree: true
+            }
+          };
+          passRefund(para).then(res => {
+            this.listLoading = false;
+            this.$message({
+              message: "不通过退款申请成功",
+              type: "success"
+            });
+            this.loaddata();
+          });
+        })
+        .catch(() => {});
+    },
+    //显示编辑界面
+    handleEdit: function(index, row) {
+      this.editFormVisible = true;
+      this.editForm = Object.assign({}, row);
+      if (this.editForm.refundState == "APPLY") {
+        this.editForm.refundState = "退款中";
+      } else {
+        this.editForm.refundState = "已退款";
+      }
     }
-
+  },
+  mounted() {
+    this.getOrder1(0);
+  }
+};
 </script>
 
 <style scoped>

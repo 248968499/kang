@@ -166,13 +166,14 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
       handlePreStep: function () {
             this.step--;
             this.goStep(this.step);
-          $('html,body').animate({scrollTop:0},500);
+          // $('html,body').animate({scrollTop:0},500);
+          
       },
       handleNextStep: function () {
          var _this = this;
          _this.step++;
          _this.goStep(_this.step);
-        $('html,body').animate({scrollTop:0},500);
+        // $('html,body').animate({scrollTop:0},500);
 
       },
       handlePublish: function () {
@@ -201,7 +202,7 @@ import { addGoodsDetails,editGoodsDetails,getGoodsDetails,getUserList} from '../
       //获取用户列表
 			getUsers() {  
 				let para = {
-					param:"COUNSELOR",
+					param:"BUYER",
 					data:{} 
 				} 
 				getUserList(para).then((res) => {

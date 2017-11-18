@@ -32,13 +32,13 @@
 			<aside :class="collapsed?'menu-collapsed':'menu-expanded'">
 				<!--导航菜单-->
 				<el-menu style="background-color:#4c4743;width:160px" :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect"
-					 unique-opened router v-show="!collapsed">
+					 unique-opened router v-show="!collapsed" ref="menuCollapsed">
 					<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
 						<!-- <el-submenu :index="index+''" v-if="!item.leaf">
 							<template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
 							<el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
 						</el-submenu> -->
-						<el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path" style="color:#C8AB86;height:35px; font-size: 12px; line-height:35px;"><i :class="item.iconCls"></i>{{item.children[0].name}}</el-menu-item>
+						<el-menu-item v-if="item.leaf&&item.children.length>0" :class="'submenu-hook-'+index" :index="item.children[0].path" @click="showMenu(index,false)" style="color:#C8AB86;height:35px; font-size: 12px; line-height:35px;"><i :class="item.iconCls"></i>{{item.children[0].name}}</el-menu-item>
 					</template>
 				</el-menu>
 				<!--导航菜单-折叠后-->
@@ -80,207 +80,213 @@
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				sysName:'Oneone',//
-				collapsed:false,
-				sysUserName: '超级管理员 陈',
-				sysUserAvatar: '',
-				form: {
-					name: '',
-					region: '',
-					date1: '',
-					date2: '',
-					delivery: false,
-					type: [],
-					resource: '',
-					desc: ''
-				}
-			}
-		},
-		methods: {
-			onSubmit() {
-				console.log('submit!');
-			},
-			handleopen() {
-				//console.log('handleopen');
-			},
-			handleclose() {
-				//console.log('handleclose');
-			},
-			handleselect: function (a, b) {
-			},
-			//退出登录
-			logout: function () {
-				var _this = this;
-				this.$confirm('确认退出吗?', '提示', {
-					//type: 'warning'
-				}).then(() => {
-					sessionStorage.removeItem('user');
-					_this.$router.push('/login');
-				}).catch(() => {
-
-				});
-
-
-			},
-			//折叠导航栏
-			collapse:function(){
-				this.collapsed=!this.collapsed;
-			},
-			showMenu(i,status){
-				this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-'+i)[0].style.display=status?'block':'none';
-			}
-		},
-		mounted() {
-			var user = sessionStorage.getItem('user');
-			if (user) {
-				user = JSON.parse(user);
-				this.sysUserName = user.name || '';
-				this.sysUserAvatar = user.avatar || '';
-			}
-
-		}
-	}
-
+export default {
+  data() {
+    return {
+      sysName: "Oneone", //
+      collapsed: false,
+      sysUserName: "超级管理员 陈",
+      sysUserAvatar: "",
+      form: {
+        name: "",
+        region: "",
+        date1: "",
+        date2: "",
+        delivery: false,
+        type: [],
+        resource: "",
+        desc: ""
+      }
+    };
+  },
+  methods: {
+    onSubmit() {
+      console.log("submit!");
+    },
+    handleopen() {
+      //console.log('handleopen');
+    },
+    handleclose() {
+      //console.log('handleclose');
+    },
+    handleselect: function(a, b) {},
+    //退出登录
+    logout: function() {
+      var _this = this;
+      this.$confirm("确认退出吗?", "提示", {
+        //type: 'warning'
+      })
+        .then(() => {
+          sessionStorage.removeItem("user");
+          _this.$router.push("/login");
+        })
+        .catch(() => {});
+    },
+    //折叠导航栏
+    collapse: function() {
+      this.collapsed = !this.collapsed;
+    },
+    showMenu(i, status) {
+      var elTemp = this.$refs.menuCollapsed.$el;
+      var submenu_hook = sessionStorage.getItem("submenu-hook");
+      if (!!submenu_hook && "submenu-hook-" + i != submenu_hook) {
+        elTemp.getElementsByClassName(submenu_hook)[0].style.cssText =
+          "background-color:#4c4743; ";
+      }
+      if ("submenu-hook-" + i != submenu_hook) {
+        elTemp.getElementsByClassName("submenu-hook-" + i)[0].style.cssText =
+          "background-color:#E5DCD1; ";
+      }
+      sessionStorage.setItem("submenu-hook", "submenu-hook-" + i);
+    }
+  },
+  mounted() {
+    var user = sessionStorage.getItem("user");
+    if (user) {
+      user = JSON.parse(user);
+      this.sysUserName = user.name || "";
+      this.sysUserAvatar = user.avatar || "";
+    }
+  }
+};
 </script>
 
 <style scoped lang="scss">
-	@import '~scss_vars';
-	
-	.container {
-		position: absolute;
-		top: 0px;
-		bottom: 0px;
-		width: 100%;
-		.header {
-			height: 60px;
-			line-height: 60px;
-			background: $color-primary;
-			color:#fff;
-			.userinfo {
-				text-align: right;
-				padding-right: 35px;
-				float: right;
-				.userinfo-inner {
-					cursor: pointer;
-					color:#fff;
-					img {
-						width: 38px;
-						height: 38px;
-						border-radius: 20px;
-						margin-top: 2px;
-						margin-left: 20px;
-						float: right;
-					}
-				}
-			}
-			.logo {  
-				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Pingfang SC", "Microsoft Yahei", "WenQuanYi Micro Hei", sans-serif;
-				//width:230px;
-				height:60px;
-				font-size: 30px;
-				padding-left:25px; 
-				border-color: rgba(238,241,146,0.3);
-				font-style: italic;
-				// border-right-width: 1px;
-				// border-right-style: solid;
-				img {
-					width: 40px;
-					float: left;
-					margin: 10px 10px 10px 18px;
-				}
-				.txt {
-					color:#fff;
-				}
-			}
-			.logo-width{
-				width:160px;
-			}
-			.logo-collapse-width{
-				width:40px
-			}
-			// .tools{
-			// 	padding: 0px 23px;
-			// 	width:14px;
-			// 	height: 80px;
-			// 	line-height: 80px;
-			// 	cursor: pointer;
-			// }
-			.tools{
-				padding: 0px 23px; 
-				height: 60px;
-				line-height: 60px;
-				cursor: pointer; 
-			}
-		}
-		.main {
-			display: flex;
-			// background: #324057;
-			position: absolute;
-			top: 60px;
-			bottom: 0px;
-			overflow: hidden;
-			aside {
-				flex:0 0 160px;
-				width: 160px;
-				// position: absolute;
-				// top: 0px;
-				// bottom: 0px;
-				.el-menu{
-					height: 100%;
-				}
-				.collapsed{
-					width:60px;
-					.item{
-						position: relative;
-					}
-					.submenu{
-						position:absolute;
-						top:0px;
-						left:60px;
-						z-index:99999;
-						height:auto;
-						display:none;
-					}
+@import "~scss_vars";
 
-				}
-			}
-			.menu-collapsed{
-				flex:0 0 60px;
-				width: 60px;
-			}
-			.menu-expanded{
-				flex:0 0 160px;
-				width: 160px;
-			}
-			.content-container {
-				// background: #f1f2f7;
-				flex:1;
-				// position: absolute;
-				// right: 0px;
-				// top: 0px;
-				// bottom: 0px;
-				// left: 230px;
-				overflow-y: scroll;
-				  padding-left: 20px;
-				.breadcrumb-container {
-					//margin-bottom: 15px;
-					.title {
-						width: 100px;
-						float: left;
-						color: #475669;
-					}
-					.breadcrumb-inner {
-						float: right; 
-					}
-				}
-				.content-wrapper {
-					background-color: #fff;
-					box-sizing: border-box;
-				}
-			}
-		}
-	}
+.container {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  width: 100%;
+  .header {
+    height: 60px;
+    line-height: 60px;
+    background: $color-primary;
+    color: #fff;
+    .userinfo {
+      text-align: right;
+      padding-right: 35px;
+      float: right;
+      .userinfo-inner {
+        cursor: pointer;
+        color: #fff;
+        img {
+          width: 38px;
+          height: 38px;
+          border-radius: 20px;
+          margin-top: 2px;
+          margin-left: 20px;
+          float: right;
+        }
+      }
+    }
+    .logo {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, "Pingfang SC", "Microsoft Yahei",
+        "WenQuanYi Micro Hei", sans-serif;
+      //width:230px;
+      height: 60px;
+      font-size: 30px;
+      padding-left: 25px;
+      border-color: rgba(238, 241, 146, 0.3);
+      font-style: italic;
+      // border-right-width: 1px;
+      // border-right-style: solid;
+      img {
+        width: 40px;
+        float: left;
+        margin: 10px 10px 10px 18px;
+      }
+      .txt {
+        color: #fff;
+      }
+    }
+    .logo-width {
+      width: 160px;
+    }
+    .logo-collapse-width {
+      width: 40px;
+    }
+    // .tools{
+    // 	padding: 0px 23px;
+    // 	width:14px;
+    // 	height: 80px;
+    // 	line-height: 80px;
+    // 	cursor: pointer;
+    // }
+    .tools {
+      padding: 0px 23px;
+      height: 60px;
+      line-height: 60px;
+      cursor: pointer;
+    }
+  }
+  .main {
+    display: flex;
+    // background: #324057;
+    position: absolute;
+    top: 60px;
+    bottom: 0px;
+    overflow: hidden;
+    aside {
+      flex: 0 0 160px;
+      width: 160px;
+      // position: absolute;
+      // top: 0px;
+      // bottom: 0px;
+      .el-menu {
+        height: 100%;
+      }
+      .collapsed {
+        width: 60px;
+        .item {
+          position: relative;
+        }
+        .submenu {
+          position: absolute;
+          top: 0px;
+          left: 60px;
+          z-index: 99999;
+          height: auto;
+          display: none;
+        }
+      }
+    }
+    .menu-collapsed {
+      flex: 0 0 60px;
+      width: 60px;
+    }
+    .menu-expanded {
+      flex: 0 0 160px;
+      width: 160px;
+    }
+    .content-container {
+      // background: #f1f2f7;
+      flex: 1;
+      // position: absolute;
+      // right: 0px;
+      // top: 0px;
+      // bottom: 0px;
+      // left: 230px;
+      overflow-y: scroll;
+      padding-left: 20px;
+      .breadcrumb-container {
+        //margin-bottom: 15px;
+        .title {
+          width: 100px;
+          float: left;
+          color: #475669;
+        }
+        .breadcrumb-inner {
+          float: right;
+        }
+      }
+      .content-wrapper {
+        background-color: #fff;
+        box-sizing: border-box;
+      }
+    }
+  }
+}
 </style>
